@@ -1,235 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Intrusion Detective System</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #808080;
-    }
-    .container {
-      max-width: 1000px;
-      margin: 20px auto;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #333333; /* White background */
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
-      position: relative; /* Added positioning */
-    }
-    h1 {
-      text-align: center;
-      color: #ffffff; /* Dark gray text color */
-    }
-    .model-options {
-      display: flex;
-      justify-content: space-around; /* Adjusted spacing */
-      margin-bottom: 20px;
-    }
-    .model-options button {
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      background-color: #Ff8c00; /* Orange */
-      color: #ffffff; /* White text color */
-      margin-right: 10px; /* Adjusted margin */
-      transition: background-color 0.3s ease; /* Smooth transition */
-    }
-    .model-options button:hover {
-      background-color: #ff7f00; /* Darker orange on hover */
-    }
-    .input-fields {
-      display: none;
-    }
-    .input-fields.active {
-      display: block;
-    }
-    .input-fields label {
-      display: block;
-      margin-bottom: 5px; /* Adjusted margin */
-      color: #ffffff; /* Dark gray text color */
-    }
-    .input-fields select, .input-fields input {
-      width: calc(100% - 20px); /* Adjusted width */
-      padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    .back-arrow {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      cursor: pointer;
-      color: #ffffff;
-      font-size: 24px;
-      display: none; /* Initially hidden */
-    }
-    .run-button {
-      text-align: center;
-      margin-top: 20px;
-    }
-    .run-button button {
-      padding: 10px 40px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      background-color: #4CAF50; /* Green */
-      color: #ffffff; /* White text color */
-      transition: background-color 0.3s ease; /* Smooth transition */
-    }
-    .run-button button:hover {
-      background-color: #45a049; /* Darker green on hover */
-    }
-  </style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Intrusion Detective System</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #808080;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #333333; /* White background */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+        position: relative; /* Added positioning */
+      }
+      h1 {
+        text-align: center;
+        color: #ffffff; /* Dark gray text color */
+      }
+      .model-options {
+        display: flex;
+        justify-content: space-around; /* Adjusted spacing */
+        margin-bottom: 20px;
+      }
+      .model-options button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #ff8c00; /* Orange */
+        color: #ffffff; /* White text color */
+        margin-right: 10px; /* Adjusted margin */
+        transition: background-color 0.3s ease; /* Smooth transition */
+      }
+      .model-options button:hover {
+        background-color: #ff7f00; /* Darker orange on hover */
+      }
+      .input-fields {
+        display: none;
+      }
+      .input-fields.active {
+        display: block;
+      }
+      .input-fields label {
+        display: block;
+        margin-bottom: 5px; /* Adjusted margin */
+        color: #ffffff; /* Dark gray text color */
+      }
+      .input-fields select,
+      .input-fields input {
+        width: calc(100% - 20px); /* Adjusted width */
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .back-arrow {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        cursor: pointer;
+        color: #ffffff;
+        font-size: 24px;
+        display: none; /* Initially hidden */
+      }
+      .run-button {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .run-button button {
+        padding: 10px 40px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #4caf50; /* Green */
+        color: #ffffff; /* White text color */
+        transition: background-color 0.3s ease; /* Smooth transition */
+      }
+      .run-button button:hover {
+        background-color: #45a049; /* Darker green on hover */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Intrusion Detective System</h1>
+      <div class="model-options">
+        <button showInputFields('lccde')">LCCDE Model</button>
+        <button onclick="showInputFields('tree')">Tree Based Model</button>
+        <button onclick="showInputFields('mth')">MTH Model</button>
+      </div>
+      <div class="back-arrow" onclick="goBack()">&#8249;</div>
+      <!-- Back arrow -->
 
-<div class="container">
-  <h1>Intrusion Detective System</h1>
-  <div class="model-options">
-    <button onclick="showInputFields('lccde')">LCCDE Model</button>
-    <button onclick="showInputFields('tree')">Tree Based Model</button>
-    <button onclick="showInputFields('mth')">MTH Model</button>
-  </div>
-  <div class="back-arrow" onclick="goBack()">&#8249;</div> <!-- Back arrow -->
-  
-  <!-- Input Fields for LCCDE Model -->
-  <div id="lccde-inputs" class="input-fields">
-    <p><label for="lccde-algorithm">Algorithm:</label>
-    <select id="lccde-algorithm">
-      <option value="" disabled selected>Select an Option</option>
-      <option value="xgboost">XGBoost</option>
-      <option value="lightgbm">LightGBM</option>
-      <option value="catboost">CatBoost</option>
-    </select></p>
-    <p><label for="lccde-dataset">Dataset:</label>
-    <select id="lccde-dataset">
-      <option value="" disabled selected>Select an Option</option>
-      <!-- Populate dataset options here -->
-      <option value="dataset1">Dataset 1</option>
-    </select></p>
-    <p><label for="lccde-verbose">Verbose:</label>
-    <input type="number" id="lccde-verbose"></p>
-    <p><label for="lccde-boosting">Boosting Type:</label>
-    <input type="text" id="lccde-boosting"></p>
-    <p><label for="lccde-epochs">Epochs:</label>
-    <input type="number" id="lccde-epochs"></p>
-  </div>
-  
-  <!-- Input Fields for Tree Based Model -->
-  <div id="tree-inputs" class="input-fields">
-    <p><label for="tree-algorithm">Algorithm:</label>
-    <select id="tree-algorithm">
-      <option value="" disabled selected>Select an Option</option>
-      <option value="xgboost">XGBoost</option>
-      <option value="lightgbm">LightGBM</option>
-      <option value="catboost">CatBoost</option>
-    </select></p>
-    <p><label for="tree-dataset">Dataset:</label>
-    <select id="tree-dataset">
-      <option value="" disabled selected>Select an Option</option>
-      <!-- Populate dataset options here -->
-      <option value="dataset1">Dataset 1</option>
-    </select></p>
-    <p><label for="tree-n-estimator">N-estimator:</label>
-    <input type="number" id="tree-n-estimator"></p>
-    <p><label for="tree-random-state">Random State:</label>
-    <input type="number" id="tree-random-state"></p>
-    <p><label for="tree-epochs">Epochs:</label>
-    <input type="number" id="tree-epochs"></p>
-  </div>
-  
-  <!-- Input Fields for MTH Model -->
-  <div id="mth-inputs" class="input-fields">
-    <p><label for="mth-algorithm">Algorithm:</label>
-    <select id="mth-algorithm">
-      <option value="" disabled selected>Select an Option</option>
-      <option value="xgboost">XGBoost</option>
-      <option value="lightgbm">LightGBM</option>
-      <option value="catboost">CatBoost</option>
-    </select></p>
-    <p><label for="mth-dataset">Dataset:</label>
-    <select id="mth-dataset">
-      <option value="" disabled selected>Select an Option</option>
-      <!-- Populate dataset options here -->
-      <option value="dataset1">Dataset 1</option>
-    </select></p>
-    <p><label for="mth-random-state">Random State:</label>
-    <input type="number" id="mth-random-state"></p>
-    <p><label for="mth-n-estimator">N-estimator:</label>
-    <input type="number" id="mth-n-estimator"></p>
-    <p><label for="mth-max-feature">Max Feature:</label>
-    <input type="number" id="mth-max-feature"></p>
-    <p><label for="mth-max-depth">Max-Depth:</label>
-    <input type="number" id="mth-max-depth"></p>
-    <p><label for="mth-learning-rate">Learning Rate:</label>
-    <input type="number" step="0.01" id="mth-learning-rate"></p>
-    <p><label for="mth-min-samples-split">Min Samples Split:</label>
-    <input type="number" id="mth-min-samples-split"></p>
-    <p><label for="mth-min-samples-leaf">Min Samples Leaf:</label>
-    <input type="number" id="mth-min-samples-leaf"></p>
-    <p><label for="mth-epochs">Epochs:</label>
-    <input type="number" id="mth-epochs"></p>
-  </div>
+      <!-- Input Fields for LCCDE Model -->
+      <div id="lccde-inputs" class="input-fields">
+        <p>
+          <label for="lccde-algorithm">Algorithm:</label>
+          <select id="lccde-algorithm">
+            <option value="" disabled selected>Select an Option</option>
+            <option value="xgboost">XGBoost</option>
+            <option value="lightgbm">LightGBM</option>
+            <option value="catboost">CatBoost</option>
+          </select>
+        </p>
+        <p>
+          <label for="lccde-dataset">Dataset:</label>
+          <select id="lccde-dataset">
+            <option value="" disabled selected>Select an Option</option>
+            <!-- Populate dataset options here -->
+            <option value="dataset1">Dataset 1</option>
+          </select>
+        </p>
+        <p>
+          <label for="lccde-verbose">Verbose:</label>
+          <input type="number" id="lccde-verbose" />
+        </p>
+        <p>
+          <label for="lccde-boosting">Boosting Type:</label>
+          <input type="text" id="lccde-boosting" />
+        </p>
+        <p>
+          <label for="lccde-epochs">Epochs:</label>
+          <input type="number" id="lccde-epochs" />
+        </p>
+      </div>
 
-  <!-- Run Button -->
-  <div class="run-button" id="run-button" style="display: none;">
-    <button onclick="runModel()">Run</button>
-  </div>
-</div>
+      <!-- Input Fields for Tree Based Model -->
+      <div id="tree-inputs" class="input-fields">
+        <p>
+          <label for="tree-algorithm">Algorithm:</label>
+          <select id="tree-algorithm">
+            <option value="" disabled selected>Select an Option</option>
+            <option value="xgboost">XGBoost</option>
+            <option value="lightgbm">LightGBM</option>
+            <option value="catboost">CatBoost</option>
+          </select>
+        </p>
+        <p>
+          <label for="tree-dataset">Dataset:</label>
+          <select id="tree-dataset">
+            <option value="" disabled selected>Select an Option</option>
+            <!-- Populate dataset options here -->
+            <option value="dataset1">Dataset 1</option>
+          </select>
+        </p>
+        <p>
+          <label for="tree-n-estimator">N-estimator:</label>
+          <input type="number" id="tree-n-estimator" />
+        </p>
+        <p>
+          <label for="tree-random-state">Random State:</label>
+          <input type="number" id="tree-random-state" />
+        </p>
+        <p>
+          <label for="tree-epochs">Epochs:</label>
+          <input type="number" id="tree-epochs" />
+        </p>
+      </div>
 
-<script>
-  function showInputFields(model) {
-    document.querySelectorAll('.input-fields').forEach(function(el) {
-      el.classList.remove('active');
-    });
-    document.getElementById(model + '-inputs').classList.add('active');
-    document.querySelector('.back-arrow').style.display = 'block'; // Show back arrow
-    let modelName = '';
-    switch (model) {
-      case 'lccde':
-        modelName = 'LCCDE Model';
-        break;
-      case 'tree':
-        modelName = 'Tree Based Model';
-        break;
-      case 'mth':
-        modelName = 'MTH Model';
-        break;
-      default:
-        modelName = '';
-    }
-    document.querySelector('h1').innerText = modelName; // Set model name in h1
-    document.querySelector('h1').style.display = 'block'; // Show IDS
-    document.querySelector('.model-options').style.display = 'none'; // Hide model options
-    document.getElementById('run-button').style.display = 'block'; // Show run button
-  }
-  
-  function goBack() {
-    document.querySelectorAll('.input-fields').forEach(function(el) {
-      el.classList.remove('active');
-    });
-    document.querySelector('.model-options').classList.add('active');
-    document.querySelector('.back-arrow').style.display = 'none'; // Hide back arrow
-    document.querySelector('h1').innerText = 'Intrusion Detective System'; // Set header back to IDS
-    document.querySelector('h1').style.display = 'block'; // Show IDS
-    document.querySelector('.model-options').style.display = 'flex'; // Show model options
-    document.getElementById('run-button').style.display = 'none'; // Hide run button
-  }
+      <!-- Input Fields for MTH Model -->
+      <div id="mth-inputs" class="input-fields">
+        <p>
+          <label for="mth-algorithm">Algorithm:</label>
+          <select id="mth-algorithm">
+            <option value="" disabled selected>Select an Option</option>
+            <option value="xgboost">XGBoost</option>
+            <option value="lightgbm">LightGBM</option>
+            <option value="catboost">CatBoost</option>
+          </select>
+        </p>
+        <p>
+          <label for="mth-dataset">Dataset:</label>
+          <select id="mth-dataset">
+            <option value="" disabled selected>Select an Option</option>
+            <!-- Populate dataset options here -->
+            <option value="dataset1">Dataset 1</option>
+          </select>
+        </p>
+        <p>
+          <label for="mth-random-state">Random State:</label>
+          <input type="number" id="mth-random-state" />
+        </p>
+        <p>
+          <label for="mth-n-estimator">N-estimator:</label>
+          <input type="number" id="mth-n-estimator" />
+        </p>
+        <p>
+          <label for="mth-max-feature">Max Feature:</label>
+          <input type="number" id="mth-max-feature" />
+        </p>
+        <p>
+          <label for="mth-max-depth">Max-Depth:</label>
+          <input type="number" id="mth-max-depth" />
+        </p>
+        <p>
+          <label for="mth-learning-rate">Learning Rate:</label>
+          <input type="number" step="0.01" id="mth-learning-rate" />
+        </p>
+        <p>
+          <label for="mth-min-samples-split">Min Samples Split:</label>
+          <input type="number" id="mth-min-samples-split" />
+        </p>
+        <p>
+          <label for="mth-min-samples-leaf">Min Samples Leaf:</label>
+          <input type="number" id="mth-min-samples-leaf" />
+        </p>
+        <p>
+          <label for="mth-epochs">Epochs:</label>
+          <input type="number" id="mth-epochs" />
+        </p>
+      </div>
 
-  function runModel() {
-    // Implement model running logic here
-    alert('Model is running!');
-  }
-</script>
+      <!-- Run Button -->
+      <div class="run-button" id="run-button" style="display: none">
+        <button onclick="runModel()">Run</button>
+      </div>
+    </div>
 
-</body>
+    <script>
+      function showInputFields(model) {
+        document.querySelectorAll(".input-fields").forEach(function (el) {
+          el.classList.remove("active");
+        });
+        document.getElementById(model + "-inputs").classList.add("active");
+        document.querySelector(".back-arrow").style.display = "block"; // Show back arrow
+        let modelName = "";
+        switch (model) {
+          case "lccde":
+            modelName = "LCCDE Model";
+            break;
+          case "tree":
+            modelName = "Tree Based Model";
+            break;
+          case "mth":
+            modelName = "MTH Model";
+            break;
+          default:
+            modelName = "";
+        }
+        document.querySelector("h1").innerText = modelName; // Set model name in h1
+        document.querySelector("h1").style.display = "block"; // Show IDS
+        document.querySelector(".model-options").style.display = "none"; // Hide model options
+        document.getElementById("run-button").style.display = "block"; // Show run button
+      }
+
+      function goBack() {
+        document.querySelectorAll(".input-fields").forEach(function (el) {
+          el.classList.remove("active");
+        });
+        document.querySelector(".model-options").classList.add("active");
+        document.querySelector(".back-arrow").style.display = "none"; // Hide back arrow
+        document.querySelector("h1").innerText = "Intrusion Detective System"; // Set header back to IDS
+        document.querySelector("h1").style.display = "block"; // Show IDS
+        document.querySelector(".model-options").style.display = "flex"; // Show model options
+        document.getElementById("run-button").style.display = "none"; // Hide run button
+      }
+
+      function runModel() {
+        // Implement model running logic here
+        alert("Model is running!");
+      }
+    </script>
+
+    <script type="module">
+      // const dotenv = require("dotenv");
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        set,
+        get,
+        child,
+      } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        // apiKey: import.meta.env.apiKey,
+        // authDomain: import.meta.env.authDomain,
+        // databaseURL: import.meta.env.databaseURL,
+        // projectId: import.meta.env.projectId,
+        // storageBucket: import.meta.env.storageBucket,
+        // messagingSenderId: import.meta.env.messagingSenderId,
+        // appId: import.meta.env.appId,
+        // measurementId: import.meta.env.measurementId,
+        apiKey: "AIzaSyA90YRqnEPXJa5NRwpxKawNR6xU1Q2bnS8",
+        authDomain: "idst68.firebaseapp.com",
+        databaseURL: "https://idst68-default-rtdb.firebaseio.com",
+        projectId: "idst68",
+        storageBucket: "idst68.appspot.com",
+        messagingSenderId: "25041131733",
+        appId: "1:25041131733:web:17e923d98ec0fe8cf6aa5c",
+        measurementId: "G-K245LCCKFX",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+    </script>
+  </body>
 </html>
