@@ -1,0 +1,115 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #808080;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #333333;
+    /* White background */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Soft shadow effect */
+    position: relative;
+    /* Added positioning */
+}
+
+h1 {
+    text-align: center;
+    color: #ffffff;
+    /* Dark gray text color */
+}
+
+.model-options {
+    display: flex;
+    justify-content: space-around;
+    /* Adjusted spacing */
+    margin-bottom: 20px;
+}
+
+.model-options button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ff8c00;
+    /* Orange */
+    color: #ffffff;
+    /* White text color */
+    margin-right: 10px;
+    /* Adjusted margin */
+    transition: background-color 0.3s ease;
+    /* Smooth transition */
+}
+
+.model-options button:hover {
+    background-color: #ff7f00;
+    /* Darker orange on hover */
+}
+
+.input-fields {
+    display: none;
+}
+
+.input-fields.active {
+    display: block;
+}
+
+.input-fields label {
+    display: block;
+    margin-bottom: 5px;
+    /* Adjusted margin */
+    color: #ffffff;
+    /* Dark gray text color */
+}
+
+.input-fields select,
+.input-fields input {
+    width: calc(100% - 20px);
+    /* Adjusted width */
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.back-arrow {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 24px;
+    display: none;
+    /* Initially hidden */
+}
+
+.run-button {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.run-button button {
+    padding: 10px 40px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #4caf50;
+    /* Green */
+    color: #ffffff;
+    /* White text color */
+    transition: background-color 0.3s ease;
+    /* Smooth transition */
+}
+
+.run-button button:hover {
+    background-color: #45a049;
+    /* Darker green on hover */
+}

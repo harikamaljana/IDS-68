@@ -33,7 +33,7 @@ function goBack() {
     document.querySelector("h1").innerText = "Intrusion Detective System"; // Set header back to IDS
     document.querySelector("h1").style.display = "block"; // Show IDS
     document.querySelector(".model-options").style.display = "flex"; // Show model options
-    document.getElementsByClassName("run-button").style.display = "none"; // Hide run button
+    // document.getElementsByClassName("run-button").style.display = "none"; // Hide run button
 }
 
 function runModel(model) {
@@ -77,7 +77,6 @@ function runModel(model) {
     console.log(data); // TODO: remove after testing
     // alert("Model is running!");
 }
-
 
 // used by frontend.html to extract elements from form
 const getElementValue = (id) => {
