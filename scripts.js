@@ -42,6 +42,7 @@ function runModel(model) {
     switch (model) {
         case "lccde":
             data = {
+                model: model,
                 algorithm: getElementValue(model + "-algorithm"),
                 dataset: getElementValue(model + "-dataset"),
                 verbose: getElementValue(model + "-verbose"),
@@ -51,6 +52,7 @@ function runModel(model) {
             break;
         case "tree":
             data = {
+                model: model,
                 algorithm: getElementValue(model + "-algorithm"),
                 dataset: getElementValue(model + "-dataset"),
                 nestimator: getElementValue(model + "-n-estimator"),
@@ -60,6 +62,7 @@ function runModel(model) {
             break;
         case "mth":
             data = {
+                model: model,
                 algorithm: getElementValue(model + "-algorithm"),
                 dataset: getElementValue(model + "-dataset"),
                 randomstate: getElementValue(model + "-random-state"),
