@@ -73,9 +73,9 @@ function runModel(model) {
             };
             break;
     }
-
+    saveMessages(data);
     console.log(data); // TODO: remove after testing
-    // alert("Model is running!");
+    alert("Inputs Saved to Database");
 }
 
 // used by frontend.html to extract elements from form

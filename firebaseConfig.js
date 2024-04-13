@@ -14,3 +14,8 @@ firebase.initializeApp(firebaseConfig);
 
 // reference db
 var dbReference = firebase.database().ref('idst68');
+
+const saveMessages = (data) => {
+    var dataSend = dbReference.push();
+    dataSend.set(data);
+}
