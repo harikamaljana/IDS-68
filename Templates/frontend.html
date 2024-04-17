@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Intrusion Detective System</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #808080;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #333333; /* White background */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+        position: relative; /* Added positioning */
+      }
+
+      h1 {
+        text-align: center;
+        color: #ffffff; /* Dark gray text color */
+      }
+
+      .model-options {
+        display: flex;
+        justify-content: space-around; /* Adjusted spacing */
+        margin-bottom: 20px;
+      }
+
+      .model-options button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #ff8c00; /* Orange */
+        color: #ffffff; /* White text color */
+        margin-right: 10px; /* Adjusted margin */
+        transition: background-color 0.3s ease; /* Smooth transition */
+      }
+
+      .model-options button:hover {
+        background-color: #ff7f00; /* Darker orange on hover */
+      }
+
+      .input-fields {
+        display: none;
+        margin-top: 10px; /* Add some space between input fields */
+      }
+
+      .input-fields.active {
+        display: block;
+      }
+
+      .input-fields label {
+        display: block;
+        margin-bottom: 5px;
+        color: #ffffff;
+      }
+
+      .input-fields select,
+      .input-fields input {
+        width: 100%; /* Make input fields take full width */
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box; /* Include padding and border in width calculation */
+        background-color: #555555; /* Gray background color */
+        color: #ffffff;
+      }
+
+      /* Adjust styling for select dropdown arrow */
+      .input-fields select {
+        appearance: none; /* Remove default appearance */
+        background-image: url('data:image/svg+xml;utf8,<svg fill="%23fff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Custom arrow */
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        padding-right: 30px; /* Adjust padding to accommodate arrow */
+      }
+
+      .input-fields select::-ms-expand {
+        display: none; /* Hide default arrow in IE */
+      }
+
+      .input-fields select,
+      .input-fields input[type="number"] {
+        -webkit-appearance: none; /* Remove default styling for number input arrows */
+      }
+
+      .input-fields input[type="number"]::-webkit-inner-spin-button,
+      .input-fields input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none; /* Remove default styling for number input arrows in WebKit browsers */
+        margin: 0; /* Remove default margin */
+      }
+
+      .back-arrow {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        cursor: pointer;
+        color: #ffffff;
+        font-size: 24px;
+        display: none; /* Initially hidden */
+      }
+
+      /* Add some margin to the back arrow */
+      .container {
+        position: relative;
+      }
+
+      .run-button {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .run-button button {
+        padding: 10px 40px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #4caf50; /* Green */
+        color: #ffffff; /* White text color */
+        transition: background-color 0.3s ease; /* Smooth transition */
+      }
+
+      .run-button button:hover {
+        background-color: #45a049; /* Darker green on hover */
+      }
+
+      .compare-models-container {
+        display: none;
+        justify-content: space-between;
+        margin-top: 20px;
+        overflow: hidden;
+      }
+      .model-column label {
+        display: block;
+        margin-bottom: 5px;
+        color: #ffffff;
+      }
+      .model-column {
+        width: 100%; /* Make input fields take full width */
+        padding: 8px 10px;
+        margin-top: 5px;
+        background-color: #333333;
+        color: #ffffff;
+      }
+      .model-column:not(:last-child) {
+        border-right: 1px solid #ccc; /* Add divider line */
+      }
+
+      .model-column select,
+      .model-column input {
+        width: 100%; /* Make input fields take full width */
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box; /* Include padding and border in width calculation */
+        background-color: #555555; /* Gray background color */
+        color: #ffffff;
+      }
+
+      /* Adjust styling for select dropdown arrow */
+      .model-column select {
+        appearance: none; /* Remove default appearance */
+        background-image: url('data:image/svg+xml;utf8,<svg fill="%23fff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Custom arrow */
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        padding-right: 30px; /* Adjust padding to accommodate arrow */
+      }
+
+      .model-column select::-ms-expand {
+        display: none; /* Hide default arrow in IE */
+      }
+
+      .model-column select,
+      .model-column input[type="number"] {
+        -webkit-appearance: none; /* Remove default styling for number input arrows */
+      }
+
+      .model-column input[type="number"]::-webkit-inner-spin-button,
+      .model-column input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none; /* Remove default styling for number input arrows in WebKit browsers */
+        margin: 0; /* Remove default margin */
+      }
+      .model-column h2 {
+        text-align: center;
+        color: #ffffff;
+      }
+
+      .model-column .input-fields {
+        display: none; /* Updated to initially hide */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Intrusion Detective System</h1>
+      <div class="model-options">
+        <button onclick="showInputFields('lccde')">LCCDE Model</button>
+        <button onclick="showInputFields('tree')">Tree Based Model</button>
+        <button onclick="showInputFields('mth')">MTH Model</button>
+        <button onclick="showCompareModels()">Compare Models</button>
+      </div>
+      <div class="back-arrow" onclick="goBack()">&#8249;</div>
+      <!-- Back arrow -->
+
+      <!-- Input Fields for LCCDE Model -->
+      <div id="lccde-inputs" class="input-fields">
+        <p>
+          <label for="lccde-algorithm">Algorithm:</label>
+          <select id="lccde-algorithm">
+            <option value="" disabled selected>Select an Option</option>
+            <option value="xgboost">XGBoost</option>
+            <option value="lightgbm">LightGBM</option>
+            <option value="catboost">CatBoost</option>
+          </select>
+        </p>
+        <p>
+          <label for="lccde-dataset">Dataset:</label>
+          <select id="lccde-dataset">
+            <option value="" disabled selected>Select an Option</option>
+            <!-- Populate dataset options here -->
+            <option value="dataset1">Dataset 1</option>
+          </select>
+        </p>
+        <p>
+          <label for="lccde-verbose">Verbose:</label>
+          <input type="number" id="lccde-verbose" />
+        </p>
+        <p>
+          <label for="lccde-boosting">Boosting Type:</label>
+          <input type="text" id="lccde-boosting" />
+        </p>
+        <p>
+          <label for="lccde-epochs">Epochs:</label>
+          <input type="number" id="lccde-epochs" />
+        </p>
+        <!-- Run Button -->
+        <div class="run-button" id="lccde-run-button" style="display: none">
+          <button>Run</button>
+        </div>
+        <div
+          id="lccde-output-container"
+          style="
+            color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+          "
+        ></div>
+      </div>
+
+      <!-- Input Fields for Tree Based Model -->
+      <div id="tree-inputs" class="input-fields">
+        <p>
+          <label for="tree-algorithm">Algorithm:</label>
+          <select id="tree-algorithm">
+            <option value="" disabled selected>Select an Option</option>
+            <option value="xgboost">XGBoost</option>
+            <option value="lightgbm">LightGBM</option>
+            <option value="catboost">CatBoost</option>
+          </select>
+        </p>
+        <p>
+          <label for="tree-dataset">Dataset:</label>
+          <select id="tree-dataset">
+            <option value="" disabled selected>Select an Option</option>
+            <!-- Populate dataset options here -->
+            <option value="dataset1">Dataset 1</option>
+          </select>
+        </p>
+        <p>
+          <label for="tree-n-estimator">N-estimator:</label>
+          <input type="number" id="tree-n-estimator" />
+        </p>
+        <p>
+          <label for="tree-random-state">Random State:</label>
+          <input type="number" id="tree-random-state" />
+        </p>
+        <p>
+          <label for="tree-epochs">Epochs:</label>
+          <input type="number" id="tree-epochs" />
+        </p>
+        <!-- Run Button -->
+        <div class="run-button" id="tree-run-button" style="display: none">
+          <button>Run</button>
+        </div>
+        <div
+          id="tree-output-container"
+          style="
+            color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+          "
+        ></div>
+      </div>
+
+      <!-- Input Fields for MTH Model -->
+      <div id="mth-inputs" class="input-fields">
+        <p>
+          <label for="mth-algorithm">Algorithm:</label>
+          <select id="mth-algorithm">
+            <option value="" disabled selected>Select an Option</option>
+            <option value="xgboost">XGBoost</option>
+            <option value="lightgbm">LightGBM</option>
+            <option value="catboost">CatBoost</option>
+          </select>
+        </p>
+        <p>
+          <label for="mth-dataset">Dataset:</label>
+          <select id="mth-dataset">
+            <option value="" disabled selected>Select an Option</option>
+            <!-- Populate dataset options here -->
+            <option value="dataset1">Dataset 1</option>
+          </select>
+        </p>
+        <p>
+          <label for="mth-random-state">Random State:</label>
+          <input type="number" id="mth-random-state" />
+        </p>
+        <p>
+          <label for="mth-n-estimator">N-estimator:</label>
+          <input type="number" id="mth-n-estimator" />
+        </p>
+        <p>
+          <label for="mth-max-feature">Max Feature:</label>
+          <input type="number" id="mth-max-feature" />
+        </p>
+        <p>
+          <label for="mth-max-depth">Max-Depth:</label>
+          <input type="number" id="mth-max-depth" />
+        </p>
+        <p>
+          <label for="mth-learning-rate">Learning Rate:</label>
+          <input type="number" step="0.01" id="mth-learning-rate" />
+        </p>
+        <p>
+          <label for="mth-min-samples-split">Min Samples Split:</label>
+          <input type="number" id="mth-min-samples-split" />
+        </p>
+        <p>
+          <label for="mth-min-samples-leaf">Min Samples Leaf:</label>
+          <input type="number" id="mth-min-samples-leaf" />
+        </p>
+        <p>
+          <label for="mth-epochs">Epochs:</label>
+          <input type="number" id="mth-epochs" />
+        </p>
+        <!-- Run Button -->
+        <div class="run-button" id="mth-run-button" style="display: none">
+          <button onclick="runModel('mth'); storeData('mth')">Run</button>
+        </div>
+        <div
+          id="mth-output-container"
+          style="
+            color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+          "
+        ></div>
+      </div>
+
+      <!-- Comparison Models Container -->
+      <div
+        class="compare-models-container"
+        id="compare-models-container"
+        style="display: none"
+      >
+        <div class="model-column">
+          <p></p>
+          <p></p>
+          <div class="model-options">
+            <button onclick="showInputFields('lccde', 1)">LCCDE Model</button>
+            <button onclick="showInputFields('tree', 1)">
+              Tree Based Model
+            </button>
+            <button onclick="showInputFields('mth', 1)">MTH Model</button>
+          </div>
+          <div id="model1-inputs"></div>
+          <!-- Added class input-fields -->
+          <div class="run-button" id="run-button-model1" style="display: none">
+            <button onclick="runModel(1)">Run</button>
+          </div>
+        </div>
+        <div class="model-column">
+          <p></p>
+          <p></p>
+          <div class="model-options">
+            <button onclick="showInputFields('lccde', 2)">LCCDE Model</button>
+            <button onclick="showInputFields('tree', 2)">
+              Tree Based Model
+            </button>
+            <button onclick="showInputFields('mth', 2)">MTH Model</button>
+          </div>
+          <div id="model2-inputs"></div>
+          <!-- Added class input-fields -->
+          <div class="run-button" id="run-button-model2" style="display: none">
+            <button onclick="runModel(2)">Run</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Run Button -->
+      <!-- <div class="run-button" id="run-button-" style="display: none"> -->
+      <!-- <button onclick="runModel('lccde')">Run</button> -->
+      <!-- </div> -->
+    </div>
+    <script type="module" src="../static/firebaseConfig.js"></script>
+
+    <script src="../static/scripts.js">
+
+
+      // function runModel(column = '') {
+      //   var inputs;
+      //   if (column === '') {
+      //     inputs = document.querySelectorAll('.input-fields.active input, .input-fields.active select');
+      //   } else {
+      //     inputs = document.querySelectorAll(`#model${column}-inputs input, #model${column}-inputs select`);
+      //   }
+
+      //   var isValid = true;
+
+      //   inputs.forEach(function(input) {
+      //     if (!input.value || input.value.trim() === '' || (input.type === 'number' && isNaN(input.value))) {
+      //       isValid = false;
+      //       input.classList.add('error');
+      //     } else {
+      //       input.classList.remove('error');
+      //     }
+      //   });
+
+      //   if (isValid) {
+      //     alert('Model is running!');
+      //   } else {
+      //     alert('Please fill all input fields correctly!');
+      //   }
+      // }
+    </script>
+
+    <script type="module">
+      import { runModel } from "../static/firebaseConfig.js";
+      // import {runModel}
+      // Listeners
+      document
+        .getElementById("lccde" + "-run-button")
+        .addEventListener("click", () => {
+          runModel("lccde");
+        });
+      document
+        .getElementById("tree" + "-run-button")
+        .addEventListener("click", () => {
+          runModel("tree");
+        });
+      document
+        .getElementById("mth" + "-run-button")
+        .addEventListener("click", () => {
+          runModel("mth");
+        });
+    </script>
+  </body>
+</html>
