@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+
 // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-analytics.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -41,12 +42,19 @@ async function runModel(model) {
     // Make an AJAX request to the Flask server endpoint
     // console.log("we're in the function of " + model);
     console.trace("run model is executing the current model: " + model);
-    fetch("/run-model", {
+
+    const jsonData = getData(model);
+
+    // var form = document.getElementById(model + "-inputs");
+    // console.log(form)
+    // var formData = new FormData(form);
+    fetch("/run-model/" + model, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ model: 2 }), // You can pass any data needed by the Python script here
+        body: JSON.stringify(jsonData)
+        // JSON.stringify({ model: 2 }), // You can pass any data needed by the Python script here
     })
         .then((response) => {
             if (!response.ok) {
@@ -79,7 +87,8 @@ async function runModel(model) {
             return;
         });
 
-    const jsonData = getData(model);
+
+
     storeData(model, jsonData);
 
     console.log('logging json data: ' + JSON.stringify(jsonData));

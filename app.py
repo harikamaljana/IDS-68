@@ -28,9 +28,12 @@ app = Flask(__name__)
 def home():
     return render_template('frontend.html')
 
-@app.route('/run-model', methods=['POST'])
-def run_model():
+@app.route('/run-model/<model>', methods=['POST'])
+def run_model(model):
     try:
+        print('updated with the right model' + model)
+        req = request.json
+        print('PICKED with the right model' + json.dumps(req, indent=4))
         # Execute the Python script
         result = subprocess.run(['python', 'LCCDE_IDS_GlobeCom22.py'], capture_output=True, text=True)
 
@@ -50,7 +53,7 @@ def run_model():
                 if filename.endswith('.png'):
                     output_data['images'][filename] = f"/get_heatmap/{filename}"  # Adjust the URL as needed
                     
-            store_heatmap()
+            store_heatmap(model, req)
             
             # Return JSON response with output and images
             return jsonify(output_data), 200
@@ -66,7 +69,15 @@ def get_heatmap(filename):
     return send_file(os.path.join('heatmaps', filename), mimetype='image/png')
 
 # @app.route('/store_heatmap/<path:filename>', methods=['GET'])
-def store_heatmap():
+def store_heatmap(model, req):
+    print('getting json data')
+    # req = request.json
+    # print('print models as json from frontend: ' + req)
+    # print (request)
+    storage_id = model + "." + req['dc']['algorithm_name'] + "." + req['dc']['verbose']
+    
+    print('SID: \t' + storage_id)
+    
     # Example usage
     catboost_png_file_path = './heatmaps/CatBoost.png';
     lightgbm_png_file_path = './heatmaps/lightGBM.png';
@@ -78,14 +89,18 @@ def store_heatmap():
     lightgbm_png_base64_data = encode_png_to_base64(lightgbm_png_file_path)
     xgboost_png_base64_data = encode_png_to_base64(xgboost_png_file_path)
         
-    images_ref = db.collection('images')
+    images_ref = db.collection('Algorithm').document(storage_id)
     
-    images_ref.add({
-        'catboost_png': catboost_png_base64_data,
-        'lightgbm_png': lightgbm_png_base64_data,
-        'xgboost_png': xgboost_png_base64_data
+    images_ref.update({
+        'images': {
+            'catboost_png': catboost_png_base64_data,
+            'lightgbm_png': lightgbm_png_base64_data,
+            'xgboost_png': xgboost_png_base64_data
+        }
     })
-    # return "Images stored in Firestore"
+    
+    print('done working')
+
 
 
 if __name__ == '__main__':
