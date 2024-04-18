@@ -40,7 +40,7 @@ const db = getFirestore();
 async function runModel(model) {
     // Make an AJAX request to the Flask server endpoint
     // console.log("we're in the function of " + model);
-    console.log("run model is executing the current model: " + model);
+    console.trace("run model is executing the current model: " + model);
     fetch("/run-model", {
         method: "POST",
         headers: {
@@ -63,7 +63,7 @@ async function runModel(model) {
                 console.log("Output:", data.output);
                 let modifiedOutput = modifyOutput(data.output);
                 document.getElementById(model + '-output-container').innerText = modifiedOutput;
-                alert("Model " + model + "executed successfully");
+                alert("Model " + model + " executed successfully");
             }
         })
         .catch((error) => {
@@ -76,9 +76,7 @@ async function runModel(model) {
         });
 
     const jsonData = getData(model);
-    // let index = jsonData['epochs'];
-    storeData(model);
-
+    storeData(model, jsonData);
 
     console.log('logging json data: ' + JSON.stringify(jsonData));
 

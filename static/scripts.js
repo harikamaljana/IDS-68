@@ -70,12 +70,10 @@ function showCompareModels() {
     document.getElementById("model2-inputs").innerHTML = "";
 }
 
-
-
 function getData(model) {
     // Implement model running logic here
     var coll, docu;
-
+    // console.log("WORKING" + TrackEvent)
     switch (model) {
         case "lccde":
             coll = {
@@ -100,7 +98,7 @@ function getData(model) {
                 idx: model + "." + getElementValue(model + "-algorithm") + "." + getElementValue(model + "-verbose"),
 
             }
-            console.log("hi")
+            console.trace("hi" + "\tTraced");
             break;
         case "tree":
             coll = {
@@ -171,8 +169,8 @@ const getElementValue = (id) => {
     return document.getElementById(id).value;
 };
 
-function storeData(model) {
-    console.log("EXECUTED SUCCESSFULLY!!! YO MODEL NAME IS:" + JSON.stringify(getData(model)));
+function storeData(model, data) {
+    console.log("EXECUTED SUCCESSFULLY!!! YO MODEL NAME IS:" + JSON.stringify(data));
 }
 
 function modifyOutput(output) {
