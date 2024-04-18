@@ -315,7 +315,7 @@
           "
         ></div>
         <div
-          id="image-output-container"
+          id="tree-image-container"
           style="
             color: white;
             border: 1px solid #ccc;
@@ -472,6 +472,7 @@
 
     <script type="module">
       import { runModel } from "../static/firebaseConfig.js";
+      import { runTree } from "../static/firebaseConfig.js";
       // import {runModel}
       // Listeners
       document
@@ -482,7 +483,7 @@
       document
         .getElementById("tree" + "-run-button")
         .addEventListener("click", () => {
-          runModel("tree");
+          runTree("tree");
         });
       document
         .getElementById("mth" + "-run-button")

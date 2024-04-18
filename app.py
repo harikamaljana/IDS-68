@@ -47,7 +47,7 @@ def home():
 def run_model():
     try:
         # Execute the Python script
-        result = subprocess.run(['python', 'LCCDE_IDS_GlobeCom22.py'], capture_output=True, text=True)
+        result = subprocess.run(['python3', 'LCCDE_IDS_GlobeCom22.py'], capture_output=True, text=True)
 
         if result.returncode == 0:
             # Script executed successfully
@@ -71,6 +71,37 @@ def run_model():
             return jsonify({'error': error}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+
+@app.route('/run-Tree', methods=['POST'])
+def run_Tree():
+    try:
+        # Execute the Python script
+        result = subprocess.run(['python3', 'Tree-based_IDS_GlobeCom19.py'], capture_output=True, text=True)
+
+        if result.returncode == 0:
+            # Script executed successfully
+            print("script runs")
+            output = result.stdout
+
+            # JSONify output and images
+            output_data = {'output': output, 'images': {}}
+
+            # Load and encode images under the heatmaps directory
+            heatmaps_dir = 'heatmaps'  # Update this to your actual directory
+            for filename in os.listdir(heatmaps_dir):
+                if filename.endswith('.png'):
+                    output_data['images'][filename] = f"/get_heatmap/{filename}"  # Adjust the URL as needed
+
+            # Return JSON response with output and images
+            return jsonify(output_data), 200
+        else:
+            # Error occurred while executing the script
+            error = result.stderr
+            return jsonify({'error': error}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
 
 @app.route('/get_heatmap/<path:filename>', methods=['GET'])
 def get_heatmap(filename):
