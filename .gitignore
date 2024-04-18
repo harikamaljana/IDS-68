@@ -1,0 +1,3 @@
+heatmaps/*.png
+LightGBM_result.json
+catboost_info/*
