@@ -32,7 +32,7 @@
 #     app.run(debug=True)
 
 
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, send_file
 import subprocess
 import os
 import base64
@@ -47,7 +47,7 @@ def home():
 def run_model():
     try:
         # Execute the Python script
-        result = subprocess.run(['python3', 'LCCDE_IDS_GlobeCom22.py'], capture_output=True, text=True)
+        result = subprocess.run(['python', 'LCCDE_IDS_GlobeCom22.py'], capture_output=True, text=True)
 
         if result.returncode == 0:
             # Script executed successfully
@@ -75,7 +75,6 @@ def run_model():
 @app.route('/get_heatmap/<path:filename>', methods=['GET'])
 def get_heatmap(filename):
     return send_file(os.path.join('heatmaps', filename), mimetype='image/png')
-    
 
 if __name__ == '__main__':
     app.run(debug=True)

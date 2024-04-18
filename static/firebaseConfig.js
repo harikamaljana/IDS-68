@@ -104,7 +104,7 @@ async function runModel(model) {
 }
 
 function displayImages(images) {
-    const container = document.getElementById('image-container');
+    const container = document.getElementById('image-output-container');
     container.innerHTML = ''; // Clear previous images
 
     for (let filename in images) {
