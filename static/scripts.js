@@ -171,8 +171,8 @@ const getElementValue = (id) => {
     return document.getElementById(id).value;
 };
 
-function storeData(model) {
-    console.log("EXECUTED SUCCESSFULLY!!! YO MODEL NAME IS:" + JSON.stringify(getData(model)));
+function storeData(model, data) {
+    console.log("EXECUTED SUCCESSFULLY!!! YO MODEL NAME IS:" + JSON.stringify(data));
 }
 
 function modifyOutput(output) {

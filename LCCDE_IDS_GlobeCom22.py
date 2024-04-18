@@ -141,7 +141,9 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.show()
+plt.savefig("heatmaps/lightGBM.png")
+#plt.show()
+
 
 result_dict = {
     'classification_report': classification_rep,
@@ -198,7 +200,8 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.show()
+plt.savefig("heatmaps/XGBoost.png")
+#plt.show()
 
 # End timing and print elapsed time
 end_time = time.time()
@@ -240,7 +243,8 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.show()
+plt.savefig("heatmaps/CatBoost.png")
+#plt.show()
 
 # End timing and print elapsed time
 end_time = time.time()
