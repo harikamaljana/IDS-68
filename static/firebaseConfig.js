@@ -66,12 +66,8 @@ async function runModel(model) {
                 alert("Model " + model + " executed successfully");
 
                 // Display images
-                storeImagesToDb(data.images);
-                // displayImages(data.images);
-                /* The line `// deleteImages('heatmaps');` is a commented-out line of code in the
-                JavaScript file. It is not currently being executed as it is preceded by double
-                slashes `//`, which indicates a comment in JavaScript. */
-                // deleteImages('heatmaps');
+                // storeImagesToDb(data.images);
+                displayImages(data.images)
             }
         })
         .catch((error) => {
