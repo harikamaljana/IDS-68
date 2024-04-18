@@ -64,6 +64,9 @@ async function runModel(model) {
                 let modifiedOutput = modifyOutput(data.output);
                 document.getElementById(model + '-output-container').innerText = modifiedOutput;
                 alert("Model " + model + " executed successfully");
+
+                // Display images
+                displayImages(data.images);
             }
         })
         .catch((error) => {
@@ -99,6 +102,20 @@ async function runModel(model) {
         });
 
 }
+
+function displayImages(images) {
+    const container = document.getElementById('image-container');
+    container.innerHTML = ''; // Clear previous images
+
+    for (let filename in images) {
+        const imageUrl = images[filename];
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.alt = filename;
+        container.appendChild(img);
+    }
+}
+
 
 export { runModel };
 
