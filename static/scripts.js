@@ -53,7 +53,6 @@ function showInputFields(model, column = "") {
     }
 }
 
-
 function showCompareModels() {
     document.querySelectorAll(".input-fields").forEach(function (el) {
         el.classList.remove("active");
@@ -120,7 +119,7 @@ function getData(model) {
                 nestimator: getElementValue(model + "-n-estimator"),
                 randomstate: getElementValue(model + "-random-state"),
                 epochs: getElementValue(model + "-epochs"),
-                idx: model + "." + getElementValue(model + "-algorithm") + "." + getElementValue(model + "-verbose"),
+                idx: model + "." + getElementValue(model + "-algorithm") + "." + getElementValue(model + "-epochs"),
             }
             break;
         case "mth":

@@ -44,10 +44,6 @@ async function runModel(model) {
     console.trace("run model is executing the current model: " + model);
 
     const jsonData = getData(model);
-
-    // var form = document.getElementById(model + "-inputs");
-    // console.log(form)
-    // var formData = new FormData(form);
     fetch("/run-model/" + model, {
         method: "POST",
         headers: {
@@ -75,7 +71,7 @@ async function runModel(model) {
 
                 // Display images
                 // storeImagesToDb(data.images);
-                displayImages(data.images)
+                displayImages(data.images, model)
             }
         })
         .catch((error) => {
@@ -113,8 +109,141 @@ async function runModel(model) {
 
 }
 
-function displayImages(images) {
-    const container = document.getElementById('image-output-container');
+// async function runTree(model) {
+//     // Make an AJAX request to the Flask server endpoint
+//     // console.log("we're in the function of " + model);
+//     console.trace("run model is executing the current model: " + model);
+//     fetch("/run-Tree", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(jsonData)
+//         // JSON.stringify({ model: 2 }), // You can pass any data needed by the Python script here
+//     })
+//         .then((response) => {
+//             if (!response.ok) {
+//                 throw new Error("Network response was not ok");
+//             }
+//             return response.json();
+//         })
+//         .then((data) => {
+//             // Handle the response from the server
+//             if (data.error) {
+//                 console.error("Error:", data.error);
+//                 alert("Error executing model");
+//             } else {
+//                 console.log("Output:", data.output);
+//                 let modifiedOutput = modifyOutput(data.output);
+//                 document.getElementById(model + '-output-container').innerText = modifiedOutput;
+//                 alert("Model " + model + " executed successfully");
+
+//                 // Display images
+//                 displayImages(data.images, model);
+//             }
+//         })
+//         .catch((error) => {
+//             console.error(
+//                 "There was a problem with the fetch operation:",
+//                 error
+//             );
+//             alert("Error executing model");
+//             return;
+//         });
+
+//     storeData(model, jsonData);
+
+//     console.log('logging json data: ' + JSON.stringify(jsonData));
+
+//     var ref = doc(db, "Model", jsonData.dc.idx);
+//     let docRef = await setDoc(ref, jsonData.collect)
+//         .then(() => {
+//             alert("data added successfully to model table");
+//         })
+//         .catch((error) => {
+//             alert("Unsuccessful operation, error: " + error);
+//         });
+
+//     var ref = doc(db, "Algorithm", jsonData.dc.idx);
+//     docRef = await setDoc(ref, jsonData.dc)
+//         .then(() => {
+//             alert("data added successfully to algorithm table");
+//         })
+//         .catch((error) => {
+//             alert("Unsuccessful operation, error: " + error);
+//         });
+
+// }
+
+// possbly wonky!!!!
+// async function runTree(model) {
+//     // Make an AJAX request to the Flask server endpoint
+//     // console.log("we're in the function of " + model);
+//     console.trace("run model is executing the current model: " + model);
+//     fetch("/run-Tree", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ model: 2 }), // You can pass any data needed by the Python script here
+//     })
+//         .then((response) => {
+//             if (!response.ok) {
+//                 throw new Error("Network response was not ok");
+//             }
+//             return response.json();
+//         })
+//         .then((data) => {
+//             // Handle the response from the server
+//             if (data.error) {
+//                 console.error("Error:", data.error);
+//                 alert("Error executing model");
+//             } else {
+//                 console.log("Output:", data.output);
+//                 let modifiedOutput = modifyOutput(data.output);
+//                 document.getElementById(model + '-output-container').innerText = modifiedOutput;
+//                 alert("Model " + model + " executed successfully");
+
+//                 // Display images
+//                 displayImages(data.images, model);
+//             }
+//         })
+//         .catch((error) => {
+//             console.error(
+//                 "There was a problem with the fetch operation:",
+//                 error
+//             );
+//             alert("Error executing model");
+//             return;
+//         });
+
+//     const jsonData = getData(model);
+//     storeData(model, jsonData);
+
+//     console.log('logging json data: ' + JSON.stringify(jsonData));
+
+//     var ref = doc(db, "Model", jsonData.dc.idx);
+//     let docRef = await setDoc(ref, jsonData.collect)
+//         .then(() => {
+//             alert("data added successfully to model table");
+//         })
+//         .catch((error) => {
+//             alert("Unsuccessful operation, error: " + error);
+//         });
+
+//     var ref = doc(db, "Algorithm", jsonData.dc.idx);
+//     docRef = await setDoc(ref, jsonData.dc)
+//         .then(() => {
+//             alert("data added successfully to algorithm table");
+//         })
+//         .catch((error) => {
+//             alert("Unsuccessful operation, error: " + error);
+//         });
+
+// }
+
+function displayImages(images, model) {
+    const container = document.getElementById(model + '-image-container');
     container.innerHTML = ''; // Clear previous images
 
     for (let filename in images) {
@@ -125,6 +254,21 @@ function displayImages(images) {
         container.appendChild(img);
     }
 }
+
+// function displayTreeImages(images) {
+
+//     const container = document.getElementById('tree-image-container');
+//     container.innerHTML = ''; // Clear previous images
+
+//     for (let filename in images) {
+//         const imageUrl = images[filename];
+//         const img = document.createElement('img');
+//         img.src = imageUrl;
+//         img.alt = filename;
+//         container.appendChild(img);
+//     }
+// }
+
 
 export { runModel };
 
