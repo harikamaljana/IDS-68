@@ -113,3 +113,55 @@ h1 {
     background-color: #45a049;
     /* Darker green on hover */
 }
+
+.output-container {
+    color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.image-output-container {
+    color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 50%; /* Adjust width as needed */
+}
+
+.image-output-container img {
+    width: 100%; /* Ensure the image takes up the full width of the container */
+    height: auto; /* Allow the height to adjust automatically based on the image's aspect ratio */
+    object-fit: cover; /* Ensure the entire image is visible within the container while maintaining aspect ratio */
+}
+
+
+.container-flex {
+    display: flex;
+}
+
+#lccde-output-container,
+#tree-output-container,
+#mth-output-container,
+#lccde-image-output-container,
+#tree-image-output-container,
+#mth-image-output-container {
+    margin-right: 10px; /* Adjust margin between containers */
+}
+
+#lccde-output-container::after,
+#tree-output-container::after,
+#mth-output-container::after,
+#lccde-image-output-container::after,
+#tree-image-output-container::after,
+#mth-image-output-container::after {
+    content: '';
+    flex-grow: 1;
+    min-height: 0;
+    border-right: 1px solid #ccc; /* Fixed column splitter line */
+}

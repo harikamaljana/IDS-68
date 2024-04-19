@@ -53,24 +53,19 @@
         <div class="run-button" id="lccde-run-button" style="display: none">
           <button>Run</button>
         </div>
-        <div
-          id="lccde-output-container"
-          style="
-            color: white;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-top: 10px;
-          "
-        ></div>
-        <div
-          id="lccde-image-container"
-          style="
-            color: white;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-top: 10px;
-          "
-        ></div>
+
+        <div class="container-flex">
+          <div
+            class="output-container"
+            id="lccde-output-container"
+            style="display: none"
+          ></div>
+          <div
+            class="image-output-container"
+            id="lccde-image-output-container"
+            style="display: none"
+          ></div>
+        </div>
       </div>
 
       <!-- Input Fields for Tree Based Model -->
@@ -118,7 +113,7 @@
           "
         ></div>
         <div
-          id="tree-image-container"
+          id="image-output-container"
           style="
             color: white;
             border: 1px solid #ccc;
@@ -193,7 +188,7 @@
           "
         ></div>
         <div
-          id="mth-image-container"
+          id="image-output-container"
           style="
             color: white;
             border: 1px solid #ccc;
@@ -249,8 +244,6 @@
 
     <script type="module">
       import { runModel } from "../static/firebaseConfig.js";
-      // import { runTree } from "../static/firebaseConfig.js";
-      // import {runModel}
       // Listeners
       document
         .getElementById("lccde" + "-run-button")

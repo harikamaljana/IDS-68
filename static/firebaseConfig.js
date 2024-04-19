@@ -67,6 +67,8 @@ async function runModel(model) {
                 console.log("Output:", data.output);
                 let modifiedOutput = modifyOutput(data.output);
                 document.getElementById(model + '-output-container').innerText = modifiedOutput;
+                document.getElementById(model + '-output-container').style.display = 'block'; // Display text output container
+                document.getElementById(model + '-image-output-container').style.display = 'block'; // Display image output container
                 alert("Model " + model + " executed successfully");
 
                 // Display images
@@ -255,19 +257,6 @@ function displayImages(images, model) {
     }
 }
 
-// function displayTreeImages(images) {
-
-//     const container = document.getElementById('tree-image-container');
-//     container.innerHTML = ''; // Clear previous images
-
-//     for (let filename in images) {
-//         const imageUrl = images[filename];
-//         const img = document.createElement('img');
-//         img.src = imageUrl;
-//         img.alt = filename;
-//         container.appendChild(img);
-//     }
-// }
 
 
 export { runModel };
