@@ -245,7 +245,7 @@ async function runModel(model) {
 // }
 
 function displayImages(images, model) {
-    const container = document.getElementById(model + '-image-container');
+    const container = document.getElementById(model + '-image-output-container');
     container.innerHTML = ''; // Clear previous images
 
     for (let filename in images) {
