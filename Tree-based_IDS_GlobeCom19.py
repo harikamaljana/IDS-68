@@ -20,6 +20,8 @@ warnings.filterwarnings("ignore")
 
 # In[3]:
 
+import requests # for get requests
+import json # to handle json requests from api endpoint
 
 import numpy as np
 import pandas as pd
@@ -33,6 +35,29 @@ from sklearn.ensemble import RandomForestClassifier,ExtraTreesClassifier
 from sklearn.tree import DecisionTreeClassifier
 import xgboost as xgb
 from xgboost import plot_importance
+
+def getinputs():    
+    try:
+        # Make a GET request to the endpoint
+        response = requests.get('http://127.0.0.1:5000/fetch-data/lccde')
+        
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            # If successful, return the JSON data
+            return response.json()
+        else:
+            # If not successful, print an error message
+            print("Error:", response.status_code)
+            return None
+    except requests.exceptions.RequestException as e:
+        # Handle any exceptions that occur during the request
+        print("Exception:", e)
+        return None
+
+print('RESPONSES ON HERE: ' + json.dumps(getinputs()))
+
+lgbm_ins = getinputs()
+values = lgbm_ins['inputlist'] # for loop
 
 
 # ## Read the sampled CICIDS2017 dataset

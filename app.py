@@ -28,6 +28,31 @@ app = Flask(__name__)
 def home():
     return render_template('frontend.html')
 
+@app.route('/fetch-data/<id>', methods=['GET'])
+def fetch_data(id):
+    algorithm_table_ref = db.collection('Algorithm')
+    model_table_ref = db.collection('Model')
+    
+    algo_docs = algorithm_table_ref.get()
+    model_docs = model_table_ref.get()
+    
+    algo_data_list = []
+    model_data_list = []
+    
+    for doc in algo_docs:
+        algo_data_list.append(doc.to_dict())
+        
+    for doc in model_docs:
+        model_data_list.append(doc.to_dict())
+        
+    input_list = []
+    # Assuming each dictionary in algo_data_list has the key 'algo_input_list'
+    for algo_data in algo_data_list:
+        input_list.extend(algo_data.get('algo_input_list', []))
+        
+    return {'Algorithm': algo_data_list, 'Model': model_data_list, 'inputlist': input_list}
+    
+
 @app.route('/run-model/<model>', methods=['POST'])
 def run_model(model):
     try:

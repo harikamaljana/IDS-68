@@ -20,6 +20,8 @@ warnings.filterwarnings("ignore")
 
 # In[2]:
 
+import requests # for get requests
+import json # to handle json requests from api endpoint
 
 import pandas as pd
 import numpy as np
@@ -113,9 +115,32 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import json
 
+
+def getinputs():    
+    try:
+        # Make a GET request to the endpoint
+        response = requests.get('http://127.0.0.1:5000/fetch-data/lccde')
+        
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            # If successful, return the JSON data
+            return response.json()
+        else:
+            # If not successful, print an error message
+            print("Error:", response.status_code)
+            return None
+    except requests.exceptions.RequestException as e:
+        # Handle any exceptions that occur during the request
+        print("Exception:", e)
+        return None
+
+print('RESPONSES ON HERE: ' + json.dumps(getinputs()))
+
+lgbm_ins = getinputs()
+values = lgbm_ins['inputlist'] # for loop
+
 # Start timing
 start_time = time.time()
-
 # Train the LightGBM algorithm
 lg = lgb.LGBMClassifier()
 lg.fit(X_train, y_train)
