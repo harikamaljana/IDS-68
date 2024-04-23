@@ -64,7 +64,7 @@ def run_model(model):
         elif model=='tree':
             modelFile='Tree-based_IDS_GlobeCom19.py'
         else:
-            modelFile='Tree-based_IDS_GlobeCom19.py'
+            modelFile='MTH_IDS_IoTJ.py'
         
         heatmaps_dir = './heatmaps/'  # Update this to your actual directory
         print('correct modelfile is selected' + model)
