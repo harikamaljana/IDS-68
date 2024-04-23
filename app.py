@@ -34,14 +34,21 @@ def home():
 def fetch_data(model):
     algorithm_table_ref = db.collection(model)
     
-    model_docs = algorithm_table_ref.get()
+    model_docs = algorithm_table_ref.order_by('timestamp').limit(1).get()
     
-    model_data_list = []
+    # Check if any documents were found
+    if not model_docs:
+        return jsonify({model: "No documents found"})
     
-    for doc in model_docs:
-        model_data_list.append(doc.to_dict())
+    # Get the first document from the query snapshot
+    first_doc = model_docs[0]
+    
+    first_doc = first_doc.to_dict()
+    first_doc['timestamp'] = first_doc['timestamp'].isoformat()
         
-    return {model: model_data_list}
+    print(first_doc)
+        
+    return json.dumps(first_doc)
     
 
 @app.route('/run-model/<model>', methods=['POST'])
@@ -67,7 +74,7 @@ def run_model(model):
                 os.remove(heatmaps_dir+filename)
                 
         # print('removed all existing files')
-            
+        store_data(model, req, time)
         result = subprocess.run(['python', modelFile], capture_output=True, text=True)
         
         print('running model file using subprocess' + model)
@@ -104,6 +111,14 @@ def run_model(model):
 def get_heatmap(filename):
     return send_file(os.path.join('heatmaps', filename), mimetype='image/png')
 
+def store_data(model, req, time):
+    storage_id = model + "." + time.strftime("%Y-%m-%d_%H:%M:%S")
+    req['timestamp'] = time
+    data_store = db.collection(model).document(storage_id)
+    data_store.set(req)
+    print('data stored')
+    # return
+    
 def store_heatmap(model, req, time):
     print('getting json data')
     
@@ -146,9 +161,9 @@ def store_heatmap(model, req, time):
     
     req['images'] = base64dataImagesJson
     print('updated files')
-    print(json.dumps(req))
+    # print(json.dumps(req))
     # exit()
-    images_ref.set(req)
+    images_ref.update(req)
     
     print('done working')
 

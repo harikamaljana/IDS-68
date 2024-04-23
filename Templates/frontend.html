@@ -34,7 +34,10 @@
           <select id="lccde-dataset">
             <option value="" disabled selected>Select an Option</option>
             <!-- Populate dataset options here -->
-            <option value="dataset1">Dataset 1</option>
+            <option value="Non-Korean Dataset">CICIDS2017_sample.csv</option>
+            <!-- <option value="" disabled selected>Select an Option</option> -->
+            <!-- Populate dataset options here -->
+            <option value="Korean Dataset.csv">CICIDS2017_sample_km.csv</option>
           </select>
         </p>
         <p>
@@ -79,7 +82,10 @@
           <select id="tree-dataset">
             <option value="" disabled selected>Select an Option</option>
             <!-- Populate dataset options here -->
-            <option value="dataset1">Dataset 1</option>
+            <option value="Non-Korean Dataset">CICIDS2017_sample.csv</option>
+            <!-- <option value="" disabled selected>Select an Option</option> -->
+            <!-- Populate dataset options here -->
+            <option value="Korean Dataset.csv">CICIDS2017_sample_km.csv</option>
           </select>
         </p>
         <p>
@@ -128,14 +134,17 @@
         </div>
       </div>
 
-      <!-- Input Fields for MTH Model -->
+      <!-- Input Fields for MTH Based Model -->
       <div id="mth-inputs" class="input-fields">
         <p>
           <label for="mth-dataset">Dataset:</label>
           <select id="mth-dataset">
             <option value="" disabled selected>Select an Option</option>
             <!-- Populate dataset options here -->
-            <option value="dataset1">Dataset 1</option>
+            <option value="Non-KM Dataset">CICIDS2017_sample.csv</option>
+            <!-- <option value="" disabled selected>Select an Option</option> -->
+            <!-- Populate dataset options here -->
+            <option value="KM Dataset.csv">CICIDS2017_sample_km.csv</option>
           </select>
         </p>
         <p>
@@ -238,7 +247,7 @@
       document
         .getElementById("tree" + "-run-button")
         .addEventListener("click", () => {
-          runModel("tree");
+          runModel("tree", );
         });
       document
         .getElementById("mth" + "-run-button")
