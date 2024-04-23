@@ -20,7 +20,7 @@
 
       <!-- Input Fields for LCCDE Model -->
       <div id="lccde-inputs" class="input-fields">
-        <p>
+        <!-- <p>
           <label for="lccde-algorithm">Algorithm:</label>
           <select id="lccde-algorithm">
             <option value="" disabled selected>Select an Option</option>
@@ -28,7 +28,7 @@
             <option value="lightgbm">LightGBM</option>
             <option value="catboost">CatBoost</option>
           </select>
-        </p>
+        </p> -->
         <p>
           <label for="lccde-dataset">Dataset:</label>
           <select id="lccde-dataset">
@@ -46,8 +46,12 @@
           <input type="text" id="lccde-boosting" />
         </p>
         <p>
-          <label for="lccde-epochs">Epochs:</label>
-          <input type="number" id="lccde-epochs" />
+          <label for="lccde-random-state">Random State:</label>
+          <input type="number" id="lccde-random-state" />
+        </p>
+        <p>
+          <label for="lccde-learning-rate">Learning Rate:</label>
+          <input type="number" step="0.01" id="lccde-learning-rate" />
         </p>
         <!-- Run Button -->
         <div class="run-button" id="lccde-run-button" style="display: none">
@@ -71,15 +75,6 @@
       <!-- Input Fields for Tree Based Model -->
       <div id="tree-inputs" class="input-fields">
         <p>
-          <label for="tree-algorithm">Algorithm:</label>
-          <select id="tree-algorithm">
-            <option value="" disabled selected>Select an Option</option>
-            <option value="xgboost">XGBoost</option>
-            <option value="lightgbm">LightGBM</option>
-            <option value="catboost">CatBoost</option>
-          </select>
-        </p>
-        <p>
           <label for="tree-dataset">Dataset:</label>
           <select id="tree-dataset">
             <option value="" disabled selected>Select an Option</option>
@@ -88,16 +83,32 @@
           </select>
         </p>
         <p>
-          <label for="tree-n-estimator">N-estimator:</label>
-          <input type="number" id="tree-n-estimator" />
-        </p>
-        <p>
           <label for="tree-random-state">Random State:</label>
           <input type="number" id="tree-random-state" />
         </p>
         <p>
-          <label for="tree-epochs">Epochs:</label>
-          <input type="number" id="tree-epochs" />
+          <label for="tree-learning-rate">Learning Rate:</label>
+          <input type="number" step="0.01" id="tree-learning-rate" />
+        </p>
+        <p>
+          <label for="tree-n-estimator">N-estimator:</label>
+          <input type="number" id="tree-n-estimator" />
+        </p>
+        <p>
+          <label for="tree-max-feature">Max Feature:</label>
+          <input type="number" id="tree-max-feature" />
+        </p>
+        <p>
+          <label for="tree-max-depth">Max-Depth:</label>
+          <input type="number" id="tree-max-depth" />
+        </p>
+        <p>
+          <label for="tree-min-samples-split">Min Samples Split:</label>
+          <input type="number" id="tree-min-samples-split" />
+        </p>
+        <p>
+          <label for="tree-min-samples-leaf">Min Samples Leaf:</label>
+          <input type="number" id="tree-min-samples-leaf" />
         </p>
         <!-- Run Button -->
         <div class="run-button" id="tree-run-button" style="display: none">
@@ -120,15 +131,6 @@
       <!-- Input Fields for MTH Model -->
       <div id="mth-inputs" class="input-fields">
         <p>
-          <label for="mth-algorithm">Algorithm:</label>
-          <select id="mth-algorithm">
-            <option value="" disabled selected>Select an Option</option>
-            <option value="xgboost">XGBoost</option>
-            <option value="lightgbm">LightGBM</option>
-            <option value="catboost">CatBoost</option>
-          </select>
-        </p>
-        <p>
           <label for="mth-dataset">Dataset:</label>
           <select id="mth-dataset">
             <option value="" disabled selected>Select an Option</option>
@@ -139,6 +141,10 @@
         <p>
           <label for="mth-random-state">Random State:</label>
           <input type="number" id="mth-random-state" />
+        </p>
+        <p>
+          <label for="mth-learning-rate">Learning Rate:</label>
+          <input type="number" step="0.01" id="mth-learning-rate" />
         </p>
         <p>
           <label for="mth-n-estimator">N-estimator:</label>
@@ -153,10 +159,6 @@
           <input type="number" id="mth-max-depth" />
         </p>
         <p>
-          <label for="mth-learning-rate">Learning Rate:</label>
-          <input type="number" step="0.01" id="mth-learning-rate" />
-        </p>
-        <p>
           <label for="mth-min-samples-split">Min Samples Split:</label>
           <input type="number" id="mth-min-samples-split" />
         </p>
@@ -164,32 +166,21 @@
           <label for="mth-min-samples-leaf">Min Samples Leaf:</label>
           <input type="number" id="mth-min-samples-leaf" />
         </p>
-        <p>
-          <label for="mth-epochs">Epochs:</label>
-          <input type="number" id="mth-epochs" />
-        </p>
         <!-- Run Button -->
         <div class="run-button" id="mth-run-button" style="display: none">
           <button>Run</button>
         </div>
-        <div
-          id="mth-output-container"
-          style="
-            color: white;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-top: 10px;
-          "
-        ></div>
-        <div
-          id="image-output-container"
-          style="
-            color: white;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-top: 10px;
-          "
-        ></div>
+        <div class="container-flex">
+          <div
+            class="output-container"
+            id="tree-output-container"
+            style="display: none"
+          ></div>
+          <div
+            class="image-output-container"
+            id="tree-image-output-container"
+            style="display: none"
+          ></div>
       </div>
 
       <!-- Comparison Models Container -->

@@ -48,16 +48,18 @@ def getinputs():
         else:
             # If not successful, print an error message
             print("Error:", response.status_code)
-            return None
+            return {'model':{'input_list': None}}
     except requests.exceptions.RequestException as e:
         # Handle any exceptions that occur during the request
         print("Exception:", e)
-        return None
+        return {'model':{'input_list': None}}
 
-print('RESPONSES ON HERE: ' + json.dumps(getinputs()))
+# print('RESPONSES ON HERE: ' + json.dumps(getinputs()))
 
 lgbm_ins = getinputs()
-values = lgbm_ins['inputlist'] # for loop
+# values = lgbm_ins['model']['input_list'] # for loop
+
+print (json.dumps(lgbm_ins))
 
 
 # ## Read the sampled CICIDS2017 dataset

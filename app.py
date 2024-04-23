@@ -5,6 +5,8 @@ import base64
 import firebase_admin
 from firebase_admin import credentials, firestore
 import json
+from datetime import datetime
+from google.cloud import firestore
 
 # Initialize Firebase Admin SDK
 cred = firebase_admin.credentials.Certificate("./idst68-firebase-adminsdk-zynhs-075a598f91.json")
@@ -28,59 +30,56 @@ app = Flask(__name__)
 def home():
     return render_template('frontend.html')
 
-@app.route('/fetch-data/<id>', methods=['GET'])
-def fetch_data(id):
-    algorithm_table_ref = db.collection('Algorithm')
-    model_table_ref = db.collection('Model')
+@app.route('/fetch-data/<model>', methods=['GET'])
+def fetch_data(model):
+    algorithm_table_ref = db.collection(model)
     
-    algo_docs = algorithm_table_ref.get()
-    model_docs = model_table_ref.get()
+    model_docs = algorithm_table_ref.get()
     
-    algo_data_list = []
     model_data_list = []
     
-    for doc in algo_docs:
-        algo_data_list.append(doc.to_dict())
-        
     for doc in model_docs:
         model_data_list.append(doc.to_dict())
         
-    input_list = []
-    # Assuming each dictionary in algo_data_list has the key 'algo_input_list'
-    for algo_data in algo_data_list:
-        input_list.extend(algo_data.get('algo_input_list', []))
-        
-    return {'Algorithm': algo_data_list, 'Model': model_data_list, 'inputlist': input_list}
+    return {model: model_data_list}
     
 
 @app.route('/run-model/<model>', methods=['POST'])
 def run_model(model):
     try:
+        time = datetime.now()
         print('updated with the right model' + model)
         req = request.json
-        print('PICKED with the right model' + json.dumps(req, indent=4))
+        # print('PICKED with the right model' + json.dumps(req, indent=4))
         # Execute the Python script
         if model=='lccde':
             modelFile='LCCDE_IDS_GlobeCom22.py'
+        elif model=='tree':
+            modelFile='Tree-based_IDS_GlobeCom19.py'
         else:
             modelFile='Tree-based_IDS_GlobeCom19.py'
         
         heatmaps_dir = './heatmaps/'  # Update this to your actual directory
-        
+        print('correct modelfile is selected' + model)
         # Load and encode images under the heatmaps directory
         if os.listdir(heatmaps_dir):
             for filename in os.listdir(heatmaps_dir):
                 os.remove(heatmaps_dir+filename)
+                
+        # print('removed all existing files')
             
         result = subprocess.run(['python', modelFile], capture_output=True, text=True)
+        
+        print('running model file using subprocess' + model)
 
         if result.returncode == 0:
             # Script executed successfully
-            print("script runs")
             output = result.stdout
-
+            print("script runs")
+            
             # JSONify output and images
-            output_data = {'output': output, 'images': {}}
+            output_data = {'output': output, 'images': {}} # change to this when running actual
+            # output_data = {'output': 'myouptut', 'images': {}}
 
             # Load and encode images under the heatmaps directory
             heatmaps_dir = 'heatmaps'  # Update this to your actual directory
@@ -88,13 +87,15 @@ def run_model(model):
                 if filename.endswith('.png'):
                     output_data['images'][filename] = f"/get_heatmap/{filename}"  # Adjust the URL as needed
                     
-            store_heatmap(model, req)
+            store_heatmap(model, req, time)
             
             # Return JSON response with output and images
             return jsonify(output_data), 200
         else:
             # Error occurred while executing the script
+            print('error not 0')
             error = result.stderr
+            print('error not 0' + error)
             return jsonify({'error': error}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -103,12 +104,22 @@ def run_model(model):
 def get_heatmap(filename):
     return send_file(os.path.join('heatmaps', filename), mimetype='image/png')
 
-def store_heatmap(model, req):
+def store_heatmap(model, req, time):
     print('getting json data')
     
-    storage_id = model + "." + req['dc']['algorithm_name'] + "." + req['dc']['epochs']
+    # old_id = model + "." + 'timeafterexecution'
+    storage_id = model + "." + time.strftime("%Y-%m-%d_%H:%M:%S")
+    # old_doc_ref = db.collection(model).document(old_id)
+    # old_doc_data = old_doc_ref.get().to_dict()
     
-    print('SID: \t' + storage_id)
+    # Delete the old document
+    # old_doc_ref.delete()
+    
+    # Create a new document with the updated data and the new ID
+    # new_doc_ref = db.collection(model).document(new_id)
+    # new_doc_ref.set(old_doc_data)
+
+    # print('SID: \t' + storage_id)
     
     if (model == 'lccde'):
         filenames = ['CatBoost.png', 'lightGBM.png', 'XGBoost.png']
@@ -116,9 +127,11 @@ def store_heatmap(model, req):
         filenames = ['TB_DecisionTree.png', 'TB_ExtraTrees.png', 'TB_FS_DecisionTree.png', 'TB_FS_ExtraTrees.png', 'TB_FS_RandomForest.png', 'TB_FS_StackModel.png', 'TB_FS_XGB.png', 'TB_RandomForest.png', 'TB_StackModel.png', 'TB_XGB.png']
     else:
         filenames = []
-        
+    
+    print('trying os gets')    
     files_directory = './heatmaps/'
     file_list = os.listdir(files_directory)
+    print('finishing os gets')    
     base64dataImagesJson = {}
     
     print('WORKING - WITH UPDATES TO BASE')
@@ -127,13 +140,15 @@ def store_heatmap(model, req):
     for f in file_list:
         if f in filenames:
             base64dataImagesJson[f] = encode_png_to_base64(files_directory+f)
-        
-    images_ref = db.collection('Algorithm').document(storage_id)
+    print('files are encoded')
+    images_ref = db.collection(model).document(storage_id)
+    print('files are decoded')
     
-    images_ref.update({
-        'images': base64dataImagesJson
-        
-    })
+    req['images'] = base64dataImagesJson
+    print('updated files')
+    print(json.dumps(req))
+    # exit()
+    images_ref.set(req)
     
     print('done working')
 

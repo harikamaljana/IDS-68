@@ -6,7 +6,7 @@ function goBack(model) {
     document.querySelector(".back-arrow").style.display = "none"; // Hide back arrow
     document.querySelector("h1").innerText = "Intrusion Detective System"; // Set header back to IDS
     document.querySelector(".model-options").style.display = "flex"; // Show model options
-    document.getElementById(model + "-run-button").style.display = "none"; // Hide run button
+    // document.getElementById(model + "-run-button").style.display = "none"; // Hide run button
     document.querySelector("#compare-models-container").style.display =
         "none";
     document.querySelectorAll(".run-button").forEach(function (el) {
@@ -71,91 +71,54 @@ function showCompareModels() {
 
 function getData(model) {
     // Implement model running logic here
-    var coll, docu;
+    var docu;
     // console.log("WORKING" + TrackEvent)
     switch (model) {
         case "lccde":
-            coll = {
-                model_name: model,
-                version: '1.0',
-                implementation: 'code goes here',
-                description: 'description here',
-            };
             docu = {
-                algorithm_name: getElementValue(model + "-algorithm"),
                 model_name: model,
-                version: '1.0',
-                algo_input_list: ['verbose', 'boosting_type', 'dataset', 'epochs'],
-                algo_output_list: 'JSON DATA HERE',
-                run_count: 'number goes here',
-                results: 'JSON DATA HERE',
-                datetime: 'datetime type goes here',
+                input_list: ['verbose', 'boosting_type', 'dataset', 'learning_rate', 'random_state'],
                 dataset: getElementValue(model + "-dataset"),
                 verbose: getElementValue(model + "-verbose"),
                 boosting_type: getElementValue(model + "-boosting"),
-                epochs: getElementValue(model + "-epochs"),
-                idx: model + "." + getElementValue(model + "-algorithm") + "." + getElementValue(model + "-verbose"),
-
+                learning_rate: getElementValue(model + "-learning-rate"),
+                random_state: getElementValue(model + "-random-state"),
             }
             console.trace("hi" + "\tTraced");
             break;
         case "tree":
-            coll = {
-                model_name: model,
-                version: '1.0',
-                implementation: 'code goes here',
-                description: 'description here',
-            };
             docu = {
-                algorithm_name: getElementValue(model + "-algorithm"),
                 model_name: model,
-                version: '1.0',
-                algo_input_list: ['dataset', 'nestimator', 'randomstate', 'epochs'],
-                algo_output_list: 'JSON DATA HERE',
-                run_count: 'number goes here',
-                results: 'JSON DATA HERE',
-                datetime: 'datetime type goes here',
+                input_list: ['dataset', 'random_state', 'learning_rate', 'n_estimator', 'max_feature', 'max_depth', 'min_samples_split', 'min_samples_leaf'],
                 dataset: getElementValue(model + "-dataset"),
-                nestimator: getElementValue(model + "-n-estimator"),
-                randomstate: getElementValue(model + "-random-state"),
-                epochs: getElementValue(model + "-epochs"),
-                idx: model + "." + getElementValue(model + "-algorithm") + "." + getElementValue(model + "-epochs"),
+                random_state: getElementValue(model + "-random-state"),
+                learning_rate: getElementValue(model + "-learning-rate"),
+                n_estimator: getElementValue(model + "-n-estimator"),
+                max_feature: getElementValue(model + "-max-feature"),
+                max_depth: getElementValue(model + "-max-depth"),
+                min_samples_split: getElementValue(model + "-min-samples-split"),
+                min_samples_leaf: getElementValue(model + "-min-samples-leaf"),
             }
             break;
         case "mth":
-            coll = {
-                model_name: model,
-                version: '1.0',
-                implementation: 'code goes here',
-                description: 'description here',
-            };
             docu = {
-                algorithm_name: getElementValue(model + "-algorithm"),
                 model_name: model,
-                version: '1.0',
-                algo_input_list: 'JSON DATA HERE',
-                algo_output_list: 'JSON DATA HERE',
-                run_count: 'number goes here',
-                results: 'JSON DATA HERE',
-                datetime: 'datetime type goes here',
+                input_list: ['dataset', 'random_state', 'learning_rate', 'n_estimator', 'max_feature', 'max_depth', 'min_samples_split', 'min_samples_leaf'],
                 dataset: getElementValue(model + "-dataset"),
-                randomstate: getElementValue(model + "-random-state"),
-                nestimator: getElementValue(model + "-n-estimator"),
-                maxfeature: getElementValue(model + "-max-feature"),
-                maxdepth: getElementValue(model + "-max-depth"),
-                learningrate: getElementValue(model + "-learning-rate"),
-                minsamplessplit: getElementValue(model + "-min-samples-split"),
-                minsamplesleaf: getElementValue(model + "-min-samples-leaf"),
-                epochs: getElementValue(model + "-epochs"),
-                idx: model + "." + getElementValue(model + "-algorithm") + "." + getElementValue(model + "-verbose"),
+                random_state: getElementValue(model + "-random-state"),
+                learning_rate: getElementValue(model + "-learning-rate"),
+                n_estimator: getElementValue(model + "-n-estimator"),
+                max_feature: getElementValue(model + "-max-feature"),
+                max_depth: getElementValue(model + "-max-depth"),
+                min_samples_split: getElementValue(model + "-min-samples-split"),
+                min_samples_leaf: getElementValue(model + "-min-samples-leaf"),
             }
             break;
         default:
-            coll = { idx: 'invalid_data' };
             docu = { idx: 'invalid_data' };
             break;
     }
-    let data = { collect: coll, dc: docu }
+    let data = docu;
     alert("Inputs Saved to Database");
     return data;
     // saveMessages(data);

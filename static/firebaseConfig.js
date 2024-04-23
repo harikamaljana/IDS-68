@@ -38,7 +38,7 @@ const db = getFirestore();
 
 // get references of boxes - already done when clicked on run buttons
 
-async function runModel(model) {
+function runModel(model) {
     // Make an AJAX request to the Flask server endpoint
     // console.log("we're in the function of " + model);
     console.trace("run model is executing the current model: " + model);
@@ -72,7 +72,6 @@ async function runModel(model) {
                 alert("Model " + model + " executed successfully");
 
                 // Display images
-                // storeImagesToDb(data.images);
                 displayImages(data.images, model)
             }
         })
@@ -85,30 +84,32 @@ async function runModel(model) {
             return;
         });
 
-
-
-    storeData(model, jsonData);
+    // storeData(model, jsonData);
 
     console.log('logging json data: ' + JSON.stringify(jsonData));
 
-    var ref = doc(db, "Model", jsonData.dc.idx);
-    let docRef = await setDoc(ref, jsonData.collect)
-        .then(() => {
-            alert("data added successfully to model table");
-        })
-        .catch((error) => {
-            alert("Unsuccessful operation, error: " + error);
-        });
+    // var id = JSON.parse(jsonData.dc);
+    // id["id"] = model+"."+ 'timeafterexecution'
+    // .toLocaleString('en-US', {
+    //     year: 'numeric',
+    //     month: 'short',
+    //     day: 'numeric',
+    //     hour: '2-digit',
+    //     minute: '2-digit',
+    //     second: '2-digit',
+    //     timeZoneName: 'short'
+    // })
 
-    var ref = doc(db, "Algorithm", jsonData.dc.idx);
-    docRef = await setDoc(ref, jsonData.dc)
-        .then(() => {
-            alert("data added successfully to algorithm table");
-        })
-        .catch((error) => {
-            alert("Unsuccessful operation, error: " + error);
-        });
+    // jsonData.dc = JSON.stringify(jsonData.dc)
 
+    // var ref = doc(db, model, jsonData.dc['id']);
+    // let docRef = await setDoc(ref, jsonData.collect)
+    //     .then(() => {
+    //         alert("data added successfully to " + model + " table");
+    //     })
+    //     .catch((error) => {
+    //         alert("Unsuccessful operation, error: " + error);
+    //     });
 }
 
 // async function runTree(model) {
