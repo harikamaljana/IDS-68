@@ -45,7 +45,7 @@ from xgboost import plot_importance
 
 #Read dataset
 #df = pd.read_csv('./data/CICIDS2017.csv') 
-df = pd.read_csv('./data/Monday-WorkingHours.pcap_ISCX.csv')
+df = pd.read_csv('./data/CICIDS2017_sample_km.csv')
 # The results in this code is based on the original CICIDS2017 dataset. Please go to cell [21] if you work on the sampled dataset. 
 
 
