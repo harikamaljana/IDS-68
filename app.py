@@ -1,3 +1,4 @@
+from flask_cors import CORS
 from flask import Flask, render_template, jsonify, request, send_file
 import subprocess
 import os
@@ -26,8 +27,11 @@ def decode_base64_to_png(base64_data, output_path):
 
 app = Flask(__name__)
 
+CORS(app)
+
 @app.route('/')
 def home():
+    print(os.getcwd())
     return render_template('frontend.html')
 
 @app.route('/fetch-data/<model>', methods=['GET'])
@@ -51,9 +55,10 @@ def fetch_data(model):
     return json.dumps(first_doc)
     
 
-@app.route('/run-model/<model>', methods=['POST'])
+@app.route('/run-model/<model>', methods=['POST'])  
 def run_model(model):
     try:
+        print('uptodatenow')
         time = datetime.now()
         print('updated with the right model' + model)
         req = request.json
@@ -168,4 +173,4 @@ def store_heatmap(model, req, time):
     print('done working')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port='5000', host='0.0.0.0')

@@ -84,7 +84,6 @@ function getData(model) {
                 learning_rate: getElementValue(model + "-learning-rate"),
                 random_state: getElementValue(model + "-random-state"),
             }
-            console.trace("hi" + "\tTraced");
             break;
         case "tree":
             docu = {

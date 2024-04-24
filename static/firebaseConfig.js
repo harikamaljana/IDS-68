@@ -76,6 +76,7 @@ function runModel(model) {
             }
         })
         .catch((error) => {
+            console.trace('ERROR TRACE')
             console.error(
                 "There was a problem with the fetch operation:",
                 error
