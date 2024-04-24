@@ -787,6 +787,7 @@ print("XGBoost: Hyperopt estimated optimum {}".format(best))
 
 # In[124]:
 
+print('working here line 790')
 
 xg = xgb.XGBClassifier(learning_rate= 0.19229249758051492, n_estimators = 30, max_depth = 36)
 xg.fit(x_train,y_train)
@@ -806,6 +807,7 @@ plt.xlabel("y_pred")
 plt.ylabel("y_true")
 plt.show()
 
+print('working here 810')
 
 # ## Anomaly-based IDS
 
@@ -935,7 +937,7 @@ for i in range(0, len(f_list2)):
     fs.append(f_list2[i][1])
     if Sum2>=0.9:
         break        
-
+print('line 940')
 
 # In[78]:
 
@@ -989,7 +991,7 @@ X_fss
 
 # In[123]:
 
-
+print ('line 994')
 from sklearn.decomposition import KernelPCA
 kpca = KernelPCA(n_components = 10, kernel = 'rbf')
 kpca.fit(X_fss, y)
@@ -1016,9 +1018,9 @@ y_test = y[len(df1):]
 
 # In[87]:
 
-
+print ('line 1021')
 pd.Series(y_train).value_counts()
-
+print('line 1023')
 
 # In[88]:
 
@@ -1054,7 +1056,7 @@ from sklearn import metrics
 
 
 # In[124]:
-
+('line 1059')
 
 def CL_kmeans(X_train, X_test, y_train, y_test,n,b=100):
     km_cluster = MiniBatchKMeans(n_clusters=n,batch_size=b)
@@ -1103,7 +1105,7 @@ CL_kmeans(X_train, X_test, y_train, y_test, 8)
 
 # In[120]:
 
-
+print('line 1108')
 #Hyperparameter optimization by BO-GP
 from skopt.space import Real, Integer
 from skopt.utils import use_named_args
