@@ -1,0 +1,5 @@
+idst68-firebase-adminsdk-zynhs-e4b0582bd5.json
+./heatmaps/*.png
+./json_outputs/converted_png/*.png
+./json_outputs/*.json
+./pngStore.py
