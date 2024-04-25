@@ -112,10 +112,9 @@ print(f'learning_rate: {lr}')
 # If you want to use this code on other datasets (e.g., CAN-intrusion dataset), just change the dataset name and follow the same steps. The models in this code are generic models that can be used in any intrusion detection/network traffic datasets.
 
 # In[3]:
-
-dataset = "./data/" + ds
+dataset = './data/CICIDS2017_sample_km.csv'
+# dataset = "./data/" + ds
 df = pd.read_csv(dataset)
-
 
 # In[4]:
 
@@ -135,9 +134,30 @@ df.Label.value_counts()
 # ## Split train set and test set
 
 # In[5]:
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
 
+if dataset == "./data/CICIDS2017_sample_km.csv":
+    X = df.drop(['Label'],axis=1)
+else: 
+    df['Label'] = df['Label'].map({
+    'BENIGN': 0,
+    'DoS': 3,
+    'WebAttack': 6,
+    'Bot': 1,
+    'PortScan': 5,
+    'BruteForce': 2,
+    'Infiltration': 4
+    })
+    df.fillna(0)
+    df.replace([np.inf, -np.inf], np.nan, inplace=True)
+    df.fillna(1e9, inplace=True)
+    # scaler = StandardScaler()
+    # X_scaled = scaler.fit_transform(df.drop(['Label'],axis=1).values)
+    imputer = SimpleImputer(strategy='mean') 
+    X = imputer.fit_transform(df.drop(['Label'],axis=1))
 
-X = df.drop(['Label'],axis=1)
+# X = df.drop(['Label'],axis=1)
 y = df['Label']
 X_train, X_test, y_train, y_test = train_test_split(X,y, train_size = 0.8, test_size = 0.2, random_state = 0) #shuffle=False
 
@@ -154,7 +174,11 @@ pd.Series(y_train).value_counts()
 
 
 from imblearn.over_sampling import SMOTE
-smote=SMOTE(n_jobs=-1,sampling_strategy={2:1000,4:1000})
+
+if dataset == './data/CICIDS2017_sample.csv':
+    smote=SMOTE(n_jobs=-1,sampling_strategy={4:1000})
+else: 
+    smote=SMOTE(n_jobs=-1,sampling_strategy={2:1000,4:1000})
 
 
 # In[8]:
@@ -249,8 +273,12 @@ start_time = time.time()
 # Train the XGBoost algorithm
 xg = xgb.XGBClassifier(random_state=rs, learning_rate=lr)
 
-X_train_x = X_train.values
-X_test_x = X_test.values
+if dataset == './data/CICIDS2017_sample.csv':
+    X_train_x = X_train
+    X_test_x = X_test
+else: 
+    X_train_x = X_train.values
+    X_test_x = X_test.values
 
 xg.fit(X_train_x, y_train)
 
@@ -448,6 +476,9 @@ import time
 
 # Start timing
 start_time = time.time()
+
+if dataset == './data/CICIDS2017_sample.csv':
+    X_test = pd.DataFrame(X_test)
 
 # Implementing LCCDE
 yt, yp = LCCDE(X_test, y_test, m1=lg, m2=xg, m3=cb)

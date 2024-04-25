@@ -130,7 +130,8 @@ print(f'Algorithm Data: {algorithm_data}')
 
 #Read dataset
 #df = pd.read_csv('./data/CICIDS2017.csv') 
-# df = pd.read_csv('./data/CICIDS2017_sample_km.csv')
+# df = pd.read_csv('./data/CICIDS2017_sample.csv')
+# dataset = './data/CICIDS2017_sample_km.csv'
 dataset = "./data/" + ds
 df = pd.read_csv(dataset)
 # The results in this code is based on the original CICIDS2017 dataset. Please go to cell [21] if you work on the sampled dataset. 
@@ -187,7 +188,10 @@ df_major = df.drop(df_minor.index)
 
 # In[10]:
 
-
+from sklearn.impute import SimpleImputer
+# # Impute NaN values with mean
+# imputer = SimpleImputer(strategy='mean')
+# X = imputer.fit_transform(df_major.drop(['Label'],axis=1))
 X = df_major.drop(['Label'],axis=1) 
 y = df_major.iloc[:, -1].values.reshape(-1,1)
 y=np.ravel(y)
@@ -272,13 +276,32 @@ result = result.drop(['klabel'],axis=1)
 
 
 # Read the sampled dataset
-df=pd.read_csv('./data/CICIDS2017_sample_km.csv')
-
+# df=pd.read_csv('./data/CICIDS2017_sample.csv')
+df = pd.read_csv(dataset)
 
 # In[22]:
+from sklearn.preprocessing import StandardScaler
 
-
-X = df.drop(['Label'],axis=1).values
+if dataset == "./data/CICIDS2017_sample_km.csv":
+    X = df.drop(['Label'],axis=1).values
+else: 
+    df['Label'] = df['Label'].map({
+    'BENIGN': 0,
+    'DoS': 3,
+    'WebAttack': 6,
+    'Bot': 1,
+    'PortScan': 5,
+    'BruteForce': 2,
+    'Infiltration': 4
+    })
+    df.fillna(0)
+    df.replace([np.inf, -np.inf], np.nan, inplace=True)
+    df.fillna(1e9, inplace=True)
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(df.drop(['Label'],axis=1).values)
+    imputer = SimpleImputer(strategy='mean') 
+    X = imputer.fit_transform(X_scaled)
+    
 y = df.iloc[:, -1].values.reshape(-1,1)
 y=np.ravel(y)
 
@@ -388,8 +411,11 @@ pd.Series(y_train).value_counts()
 
 
 from imblearn.over_sampling import SMOTE
-smote=SMOTE(n_jobs=-1,sampling_strategy={2:1000,4:1000})
 
+if dataset == './data/CICIDS2017_sample.csv':
+    smote=SMOTE(n_jobs=-1,sampling_strategy={4:1000})
+else:   
+    smote=SMOTE(n_jobs=-1,sampling_strategy={2:1000,4:1000})
 
 # In[36]:
 
