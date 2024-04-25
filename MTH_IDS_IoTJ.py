@@ -33,7 +33,8 @@ from sklearn.ensemble import RandomForestClassifier,ExtraTreesClassifier
 from sklearn.tree import DecisionTreeClassifier
 import xgboost as xgb
 from xgboost import plot_importance
-import json
+import requests # for get requests
+import json # to handle json requests from api endpoint
 
 def getinputs():    
     try:
@@ -62,7 +63,7 @@ print(f'Algorithm Data: {algorithm_data}')
 
 ds = algorithm_data['dataset']
 if ds == "":
-    ds = "CICIDS2017_sample.csv"
+    ds = "CICIDS2017_sample_km.csv"
 
 if algorithm_data['random_state'] == '':
     rs = 0
@@ -70,43 +71,53 @@ else:
     rs = int(algorithm_data['random_state'])
 
 if algorithm_data['learning_rate'] == '':
-    lr = None
+    lr_empty = True
 else:
+    lr_empty = False
     lr = float(algorithm_data['learning_rate'])
 
 if algorithm_data['n_estimator'] == '':
-    ne = 10
+    ne_empty = True
 else: 
+    ne_empty = False
     ne = int(algorithm_data['n_estimator'])
 
 if algorithm_data['max_depth'] == '':
-    md = None
+    md_empty = True
 else :
+    md_empty = False
     md = int(algorithm_data['max_depth'])
 
 if algorithm_data['max_feature'] == '':
-    mf = None
+    mf_empty = True
 else :
+    mf_empty = False
     mf = int(algorithm_data['max_feature'])
 
 if algorithm_data['min_samples_split'] == '':
-    mss = None
+    mss_empty = True
 else :
-    mss = int(algorithm_data['min_samples_split'])
+    mss_empty = False
+    mss = float(algorithm_data['min_samples_split'])
+    if mss >= 2:
+        mss = int(mss)
 
 if algorithm_data['min_samples_leaf'] == '':
-    msl = None
+    msl_empty = True
 else :
+    msl_empty = False
     msl = float(algorithm_data['min_samples_leaf'])
+    if msl >= 2:
+        msl = int(msl)
 
 print(f'Algorithm Data: {algorithm_data}')
-print(f'random_state: {rs}')
-print(f'learning_rate: {lr}')
-print(f'n_estimator: {ne}')
-print(f'max_depth: {lr}')
-print(f'max_feature: {mf}')
-print(f'min_samples_split: {mss}')
-print(f'min_samples_leaf: {msl}')
+# print(f'random_state: {rs}')
+# print(f'learning_rate: {lr}')
+# print(f'n_estimator: {ne}')
+# print(f'max_depth: {lr}')
+# print(f'max_feature: {mf}')
+# print(f'min_samples_split: {mss}')
+# print(f'min_samples_leaf: {msl}')
 
 
 # Read the sampled CICIDS2017 dataset
@@ -119,7 +130,9 @@ print(f'min_samples_leaf: {msl}')
 
 #Read dataset
 #df = pd.read_csv('./data/CICIDS2017.csv') 
-df = pd.read_csv('./data/CICIDS2017_sample_km.csv')
+# df = pd.read_csv('./data/CICIDS2017_sample_km.csv')
+dataset = "./data/" + ds
+df = pd.read_csv(dataset)
 # The results in this code is based on the original CICIDS2017 dataset. Please go to cell [21] if you work on the sampled dataset. 
 
 
@@ -398,8 +411,9 @@ pd.Series(y_train).value_counts()
 
 # In[58]:
 
-
-xg = xgb.XGBClassifier(n_estimators = 10)
+if ne_empty:
+    ne = 10
+xg = xgb.XGBClassifier(n_estimators = ne)
 xg.fit(X_train,y_train)
 xg_score=xg.score(X_test,y_test)
 y_predict=xg.predict(X_test)
@@ -456,8 +470,13 @@ print("XGBoost: Hyperopt estimated optimum {}".format(best))
 
 # In[114]:
 
-
-xg = xgb.XGBClassifier(learning_rate= 0.7340229699980686, n_estimators = 70, max_depth = 14)
+if lr_empty:
+    lr = 0.7340229699980686
+if ne_empty:
+    ne = 70
+if md_empty:
+    md = 14
+xg = xgb.XGBClassifier(learning_rate= lr, n_estimators = ne, max_depth = md)
 xg.fit(X_train,y_train)
 xg_score=xg.score(X_test,y_test)
 y_predict=xg.predict(X_test)
@@ -489,7 +508,7 @@ xg_test=xg.predict(X_test)
 # In[103]:
 
 
-rf = RandomForestClassifier(random_state = 0)
+rf = RandomForestClassifier(random_state = rs)
 rf.fit(X_train,y_train) 
 rf_score=rf.score(X_test,y_test)
 y_predict=rf.predict(X_test)
@@ -552,8 +571,17 @@ print("Random Forest: Hyperopt estimated optimum {}".format(best))
 
 # In[104]:
 
-
-rf_hpo = RandomForestClassifier(n_estimators = 71, min_samples_leaf = 1, max_depth = 46, min_samples_split = 9, max_features = 20, criterion = 'entropy')
+if ne_empty:
+    ne = 71
+if msl_empty:
+    msl = 1
+if md_empty:
+    md = 46
+if mss_empty:
+    mss = 9
+if mf_empty:
+    mf = 20
+rf_hpo = RandomForestClassifier(n_estimators = ne, min_samples_leaf = msl, max_depth = md, min_samples_split = mss, max_features = mf, criterion = 'entropy')
 rf_hpo.fit(X_train,y_train)
 rf_score=rf_hpo.score(X_test,y_test)
 y_predict=rf_hpo.predict(X_test)
@@ -585,7 +613,7 @@ rf_test=rf_hpo.predict(X_test)
 # In[100]:
 
 
-dt = DecisionTreeClassifier(random_state = 0)
+dt = DecisionTreeClassifier(random_state = rs)
 dt.fit(X_train,y_train) 
 dt_score=dt.score(X_test,y_test)
 y_predict=dt.predict(X_test)
@@ -646,8 +674,15 @@ print("Decision tree: Hyperopt estimated optimum {}".format(best))
 
 # In[101]:
 
-
-dt_hpo = DecisionTreeClassifier(min_samples_leaf = 2, max_depth = 47, min_samples_split = 3, max_features = 19, criterion = 'gini')
+if msl_empty:
+    msl = 2
+if md_empty:
+    md = 47
+if mss_empty:
+    mss = 3
+if mf_empty:
+    mf = 19
+dt_hpo = DecisionTreeClassifier(min_samples_leaf = msl, max_depth = md, min_samples_split = mss, max_features = mf, criterion = 'gini')
 dt_hpo.fit(X_train,y_train)
 dt_score=dt_hpo.score(X_test,y_test)
 y_predict=dt_hpo.predict(X_test)
@@ -679,7 +714,7 @@ dt_test=dt_hpo.predict(X_test)
 # In[106]:
 
 
-et = ExtraTreesClassifier(random_state = 0)
+et = ExtraTreesClassifier(random_state = rs)
 et.fit(X_train,y_train) 
 et_score=et.score(X_test,y_test)
 y_predict=et.predict(X_test)
@@ -742,8 +777,17 @@ print("Random Forest: Hyperopt estimated optimum {}".format(best))
 
 # In[108]:
 
-
-et_hpo = ExtraTreesClassifier(n_estimators = 53, min_samples_leaf = 1, max_depth = 31, min_samples_split = 5, max_features = 20, criterion = 'entropy')
+if ne_empty:
+    ne = 53
+if msl_empty:
+    msl = 1
+if md_empty:
+    md = 31
+if mss_empty:
+    mss = 5
+if mf_empty:
+    mf = 20
+et_hpo = ExtraTreesClassifier(n_estimators = ne, min_samples_leaf = msl, max_depth = md, min_samples_split = mss, max_features = mf, criterion = 'entropy')
 et_hpo.fit(X_train,y_train) 
 et_score=et_hpo.score(X_test,y_test)
 y_predict=et_hpo.predict(X_test)
@@ -870,8 +914,13 @@ print("XGBoost: Hyperopt estimated optimum {}".format(best))
 
 # In[124]:
 
-
-xg = xgb.XGBClassifier(learning_rate= 0.19229249758051492, n_estimators = 30, max_depth = 36)
+if lr_empty:
+    lr = 0.19229249758051492
+if ne_empty:
+    ne = 30
+if md_empty:
+    md = 36
+xg = xgb.XGBClassifier(learning_rate= lr, n_estimators = ne, max_depth = md)
 xg.fit(x_train,y_train)
 xg_score=xg.score(x_test,y_test)
 y_predict=xg.predict(x_test)
