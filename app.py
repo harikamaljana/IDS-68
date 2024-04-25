@@ -87,6 +87,8 @@ def run_model(model):
             # JSONify output and images
             output_data = {'output': output, 'images': {}} # change to this when running actual
             # output_data = {'output': 'myouptut', 'images': {}}
+            store_output(model, req, time, output)
+            
 
             # Load and encode images under the heatmaps directory
             heatmaps_dir = 'heatmaps'  # Update this to your actual directory
@@ -118,7 +120,14 @@ def store_data(model, req, time):
     data_store.set(req)
     print('data stored')
     # return
-    
+
+def store_output(model, req, time, output):
+    storage_id = model + "." + time.strftime("%Y-%m-%d_%H:%M:%S")
+    req['output'] = output
+    data_store = db.collection(model).document(storage_id)
+    data_store.set(req)
+    print('output stored')
+
 def store_heatmap(model, req, time):
     print('getting json data')
     
