@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intrusion Detective System</title>
+    <link rel="stylesheet" href="../static/styles.css" />
+    <style>
+        /* CSS for the split layout */
+        .split {
+            height: 100%;
+            width: 0; /* Initially hidden */
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+            transition: width 0.5s; /*Only transition the width property */
+        }
+
+        /* Control the left side */
+        .left {
+            left: 0;
+            background-color: #1A4A5A;
+        }
+
+        /* Control the right side */
+        .right {
+            right: 0;
+            background-color: #0F2C40;
+        }
+
+        /* If you want the text centered */
+        .centered {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+        }
+
+        /* CSS for the dropdown menus */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content-left {
+            display: none;
+            position: absolute;
+            background-color: #000000;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content-left a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content-left a:hover {
+            background-color: rgb(70, 67, 67);
+        }
+
+        .dropdown:hover .dropdown-content-left {
+            display: block;
+        }
+
+        .dropdown-content-right {
+            display: none;
+            position: absolute;
+            background-color: #000000;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content-right a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content-right a:hover {
+            background-color: rgb(70, 67, 67);
+        }
+
+        .dropdown:hover .dropdown-content-right {
+            display: block;
+        }
+
+        .back-arrow {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+            color: #ffffff;
+            font-size: 24px;
+            /* Initially hidden */
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Intrusion Detective System</h1>
+    <div class="model-options">
+        <button onclick="showInputFields('lccde')">LCCDE Model</button>
+        <button onclick="showInputFields('tree')">Tree Based Model</button>
+        <button onclick="showInputFields('mth')">MTH Model</button>
+    </div>
+    <div class="back-arrow" id="backArrow" onclick="goBack()">&#8249;</div>
+    <!-- Back arrow -->
+
+    <!-- Input Fields for LCCDE Model -->
+    <div id="lccde-inputs" class="input-fields">
+        <button onclick="compareRun()">Compare Runs</button>
+        <p>
+            <label for="lccde-dataset">Dataset:</label>
+            <select id="lccde-dataset">
+                <option value="" disabled selected>Select an Option</option>
+                <!-- Populate dataset options here -->
+                <!-- <option value="Non-Korean Dataset">CICIDS2017_sample.csv</option> -->
+                <!-- <option value="" disabled selected>Select an Option</option> -->
+                <!-- Populate dataset options here -->
+                <option value="Korean Dataset.csv">CICIDS2017_sample_km.csv</option>
+            </select>
+        </p>
+        <p>
+            <label for="lccde-verbose">Verbose:</label>
+            <input type="number" id="lccde-verbose" />
+        </p>
+        <p>
+            <label for="lccde-boosting">Boosting Type:</label>
+            <select id="lccde-boosting">
+                <option value="" disabled selected>Select an Option</option>
+                <!-- Populate dataset options here -->
+                <option value="Plain">Plain</option>
+                <!-- <option value="" disabled selected>Select an Option</option> -->
+                <!-- Populate dataset options here -->
+                <option value="Ordered">Ordered</option>
+            </select>
+        </p>
+        <p>
+            <label for="lccde-random-state">Random State:</label>
+            <input type="number" id="lccde-random-state" />
+        </p>
+        <p>
+            <label for="lccde-learning-rate">Learning Rate:</label>
+            <input type="number" step="0.01" id="lccde-learning-rate" />
+        </p>
+        <!-- Run Button -->
+        <div class="run-button" id="lccde-run-button" style="display: none">
+            <button>Run</button>
+        </div>
+
+        <div class="container-flex">
+            <div
+                class="output-container"
+                id="lccde-output-container"
+                style="display: none"
+            ></div>
+            <div
+                class="image-output-container"
+                id="lccde-image-output-container"
+                style="display: none"
+            ></div>
+        </div>
+
+        <!-- Split Layout LCCDE-->
+<div class="split left" id="left-lccde">
+  <div class="centered">
+      <h2>Select a Previous LCCDE Run</h2>
+      <div class="dropdown">
+          <button class="dropbtn">Dropdown</button>
+          <div class="dropdown-content-left" id="lccde-dropdown-content-left"></div>
+      </div>
+  </div>
+</div>
+
+<div class="split right" id="right-lccde">
+  <div class="centered">
+      <h2>Select a Previous LCCDE Run</h2>
+      <div class="dropdown">
+          <button class="dropbtn">Dropdown</button>
+          <div class="dropdown-content-right" id="lccde-dropdown-content-right"></div>
+      </div>
+  </div>
+</div>
+    </div>
+
+    <!-- Input Fields for Tree Based Model -->
+    <div id="tree-inputs" class="input-fields">
+        <button onclick="compareRun()">Compare Runs</button>        <p>
+            <label for="tree-dataset">Dataset:</label>
+            <select id="tree-dataset">
+                <option value="" disabled selected>Select an Option</option>
+                <!-- Populate dataset options here -->
+                <option value="Non-Korean Dataset">CICIDS2017_sample.csv</option>
+                <!-- <option value="" disabled selected>Select an Option</option> -->
+                <!-- Populate dataset options here -->
+                <!-- <option value="Korean Dataset.csv">CICIDS2017_sample_km.csv</option> -->
+            </select>
+        </p>
+        <p>
+            <label for="tree-random-state">Random State:</label>
+            <input type="number" id="tree-random-state" />
+        </p>
+        <p>
+            <label for="tree-learning-rate">Learning Rate:</label>
+            <input type="number" step="0.01" id="tree-learning-rate" />
+        </p>
+        <p>
+            <label for="tree-n-estimator">N-estimator:</label>
+            <input type="number" id="tree-n-estimator" />
+        </p>
+        <p>
+            <label for="tree-max-feature">Max Feature:</label>
+            <input type="number" id="tree-max-feature" />
+        </p>
+        <p>
+            <label for="tree-max-depth">Max-Depth:</label>
+            <input type="number" id="tree-max-depth" />
+        </p>
+        <p>
+            <label for="tree-min-samples-split">Min Samples Split:</label>
+            <input type="number" id="tree-min-samples-split" />
+        </p>
+        <p>
+            <label for="tree-min-samples-leaf">Min Samples Leaf:</label>
+            <input type="number" id="tree-min-samples-leaf" />
+        </p>
+        <!-- Run Button -->
+        <div class="run-button" id="tree-run-button" style="display: none">
+            <button>Run</button>
+        </div>
+        <div class="container-flex">
+            <div
+                class="output-container"
+                id="tree-output-container"
+                style="display: none"
+            ></div>
+            <div
+                class="image-output-container"
+                id="tree-image-output-container"
+                style="display: none"
+            ></div>
+        </div>
+        <!-- Split Layout Tree-->
+<div class="split left" id="left-tree">
+  <div class="centered">
+      <h2>Select a Previous Tree Based Run</h2>
+      <div class="dropdown">
+          <button class="dropbtn">Dropdown</button>
+          <div class="dropdown-content-left" id="tree-dropdown-content-left"></div>
+      </div>
+  </div>
+</div>
+
+<div class="split right" id="right-tree">
+  <div class="centered">
+      <h2>Select a Previous Tree Based Run</h2>
+      <div class="dropdown">
+          <button class="dropbtn">Dropdown</button>
+          <div class="dropdown-content-right" id="tree-dropdown-content-right"></div>
+      </div>
+  </div>
+</div>
+    </div>
+
+    <!-- Input Fields for MTH Based Model -->
+    <div id="mth-inputs" class="input-fields">
+        <button onclick="compareRun()">Compare Runs</button>        <p>
+            <label for="mth-dataset">Dataset:</label>
+            <select id="mth-dataset">
+                <option value="" disabled selected>Select an Option</option>
+                <!-- Populate dataset options here -->
+                <!-- <option value="Non-KM Dataset">CICIDS2017_sample.csv</option> -->
+                <!-- <option value="" disabled selected>Select an Option</option> -->
+                <!-- Populate dataset options here -->
+                <option value="KM Dataset.csv">CICIDS2017_sample_km.csv</option>
+            </select>
+        </p>
+        <p>
+            <label for="mth-random-state">Random State:</label>
+            <input type="number" id="mth-random-state" />
+        </p>
+        <p>
+            <label for="mth-learning-rate">Learning Rate:</label>
+            <input type="number" step="0.01" id="mth-learning-rate" />
+        </p>
+        <p>
+            <label for="mth-n-estimator">N-estimator:</label>
+            <input type="number" id="mth-n-estimator" />
+        </p>
+        <p>
+            <label for="mth-max-feature">Max Feature:</label>
+            <input type="number" id="mth-max-feature" />
+        </p>
+        <p>
+            <label for="mth-max-depth">Max-Depth:</label>
+            <input type="number" id="mth-max-depth" />
+        </p>
+        <p>
+            <label for="mth-min-samples-split">Min Samples Split:</label>
+            <input type="number" id="mth-min-samples-split" />
+        </p>
+        <p>
+            <label for="mth-min-samples-leaf">Min Samples Leaf:</label>
+            <input type="number" id="mth-min-samples-leaf" />
+        </p>
+        <!-- Run Button -->
+        <div class="run-button" id="mth-run-button" style="display: none">
+            <button>Run</button>
+        </div>
+        <div class="container-flex">
+            <div
+                class="output-container"
+                id="mth-output-container"
+                style="display: none"
+            ></div>
+            <div
+                class="image-output-container"
+                id="mth-image-output-container"
+                style="display: none"
+            ></div>
+        </div>
+    <!-- Split Layout MTH-->
+<div class="split left" id="left-mth">
+  <div class="centered">
+      <h2>Select a Previous MTH Run</h2>
+      <div class="dropdown">
+          <button class="dropbtn">Dropdown</button>
+          <div class="dropdown-content-left" id="mth-dropdown-content-left"></div>
+      </div>
+  </div>
+</div>
+
+<div class="split right" id="right-mth">
+  <div class="centered">
+      <h2>Select a Previous MTH Run</h2>
+      <div class="dropdown">
+          <button class="dropbtn">Dropdown</button>
+          <div class="dropdown-content-right" id="mth-dropdown-content-right"></div>
+      </div>
+  </div>
+</div>
+      </div>
+    
+</div>
+
+
+
+
+<script>
+    // Function to handle click on "Compare Runs" button
+function compareRun() {
+    // Get left and right split elements for each model
+    var leftLccde = document.getElementById("left-lccde");
+    var rightLccde = document.getElementById("right-lccde");
+    var leftTree = document.getElementById("left-tree");
+    var rightTree = document.getElementById("right-tree");
+    var leftMth = document.getElementById("left-mth");
+    var rightMth = document.getElementById("right-mth");
+
+    // Set width of each split to 50% of viewport width for each model
+    leftLccde.style.width = "50%";
+    rightLccde.style.width = "50%";
+    leftTree.style.width = "50%";
+    rightTree.style.width = "50%";
+    leftMth.style.width = "50%";
+    rightMth.style.width = "50%";
+}
+
+
+    
+</script>
+
+<script type="module" src="../static/firebaseConfig.js"></script>
+
+<script src="../static/scripts.js"></script>
+
+<script type="module">
+    import { runModel } from "../static/firebaseConfig.js";
+    // Listeners
+    document
+        .getElementById("lccde" + "-run-button")
+        .addEventListener("click", () => {
+            runModel("lccde");
+        });
+    document
+        .getElementById("tree" + "-run-button")
+        .addEventListener("click", () => {
+            runModel("tree", );
+        });
+    document
+        .getElementById("mth" + "-run-button")
+        .addEventListener("click", () => {
+            runModel("mth");
+        });
+</script>
+</body>
+</html>
