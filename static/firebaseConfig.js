@@ -42,6 +42,7 @@ function runModel(model) {
     // Make an AJAX request to the Flask server endpoint
     // console.log("we're in the function of " + model);
     console.trace("run model is executing the current model: " + model);
+    document.getElementById(model + '-output-container').innerText = "";
 
     const jsonData = getData(model);
     fetch("/run-model/" + model, {
@@ -66,6 +67,7 @@ function runModel(model) {
             } else {
                 console.log("Output:", data.output);
                 let modifiedOutput = modifyOutput(data.output);
+                document.getElementById(model + '-output-container').innerText = "";
                 document.getElementById(model + '-output-container').innerText = modifiedOutput;
                 document.getElementById(model + '-output-container').style.display = 'block'; // Display text output container
                 document.getElementById(model + '-image-output-container').style.display = 'block'; // Display image output container

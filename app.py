@@ -49,7 +49,7 @@ def fetch_timestamps(model):
 def fetch_data(model):
     algorithm_table_ref = db.collection(model)
     
-    model_docs = algorithm_table_ref.order_by('timestamp').limit(1).get()
+    model_docs = algorithm_table_ref.order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1).get()
     
     # Check if any documents were found
     if not model_docs:
@@ -117,12 +117,13 @@ def run_model(model):
             # Script executed successfully
             output = result.stdout
             print("script runs")
+
+            print(f'raw output: {output}')
             
             # JSONify output and images
             output_data = {'output': output, 'images': {}} # change to this when running actual
             # output_data = {'output': 'myouptut', 'images': {}}
             store_output(model, req, time, output)
-            
 
             # Load and encode images under the heatmaps directory
             heatmaps_dir = 'heatmaps'  # Update this to your actual directory

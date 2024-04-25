@@ -33,6 +33,80 @@ from sklearn.ensemble import RandomForestClassifier,ExtraTreesClassifier
 from sklearn.tree import DecisionTreeClassifier
 import xgboost as xgb
 from xgboost import plot_importance
+import json
+
+def getinputs():    
+    try:
+        # Make a GET request to the endpoint
+        response = requests.get('http://127.0.0.1:5000/fetch-data/mth')
+        
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            # If successful, return the JSON data
+            return response.json()
+        else:
+            # If not successful, print an error message
+            print("Error:", response.status_code)
+            return {'model':{'input_list': None}}
+    except requests.exceptions.RequestException as e:
+        # Handle any exceptions that occur during the request
+        print("Exception:", e)
+        return {'model':{'input_list': None}}
+
+# print('RESPONSES ON HERE: ' + json.dumps(getinputs()))
+
+test = json.dumps(getinputs())
+algorithm_data = json.loads(test)
+
+print(f'Algorithm Data: {algorithm_data}')
+
+ds = algorithm_data['dataset']
+if ds == "":
+    ds = "CICIDS2017_sample.csv"
+
+if algorithm_data['random_state'] == '':
+    rs = 0
+else: 
+    rs = int(algorithm_data['random_state'])
+
+if algorithm_data['learning_rate'] == '':
+    lr = None
+else:
+    lr = float(algorithm_data['learning_rate'])
+
+if algorithm_data['n_estimator'] == '':
+    ne = 10
+else: 
+    ne = int(algorithm_data['n_estimator'])
+
+if algorithm_data['max_depth'] == '':
+    md = None
+else :
+    md = int(algorithm_data['max_depth'])
+
+if algorithm_data['max_feature'] == '':
+    mf = None
+else :
+    mf = int(algorithm_data['max_feature'])
+
+if algorithm_data['min_samples_split'] == '':
+    mss = None
+else :
+    mss = int(algorithm_data['min_samples_split'])
+
+if algorithm_data['min_samples_leaf'] == '':
+    msl = None
+else :
+    msl = float(algorithm_data['min_samples_leaf'])
+
+print(f'Algorithm Data: {algorithm_data}')
+print(f'random_state: {rs}')
+print(f'learning_rate: {lr}')
+print(f'n_estimator: {ne}')
+print(f'max_depth: {lr}')
+print(f'max_feature: {mf}')
+print(f'min_samples_split: {mss}')
+print(f'min_samples_leaf: {msl}')
 
 
 # Read the sampled CICIDS2017 dataset
