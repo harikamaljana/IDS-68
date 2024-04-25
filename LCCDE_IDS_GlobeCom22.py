@@ -36,6 +36,75 @@ import time
 from river import stream
 from statistics import mode
 
+# fetch from database
+def getinputs():    
+    try:
+        # Make a GET request to the endpoint
+        response = requests.get('http://127.0.0.1:5000/fetch-data/lccde')
+        
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            # If successful, return the JSON data
+            return response.json()
+        else:
+            # If not successful, print an error message
+            print("Error:", response.status_code)
+            return None
+    except requests.exceptions.RequestException as e:
+        # Handle any exceptions that occur during the request
+        print("Exception:", e)
+        return None
+
+# print('RESPONSES ON HERE: ' + json.dumps(getinputs()))
+
+# lgbm_ins = getinputs()
+# values = lgbm_ins['inputlist'] # for loop
+
+# Convert the JSON object into a Python list
+# json_inputs = json.dumps(getinputs())
+
+# file_path = "example.txt"
+
+# with open(file_path, 'w') as file:
+#     # Write content into the file
+#     file.write(json.dumps(getinputs()))
+#     # file.write('ag_data: ' + algorithm_data)
+
+# print("File created successfully!")
+test = json.dumps(getinputs())
+algorithm_data = json.loads(test)
+
+bt = algorithm_data['boosting_type']
+if bt == '':
+    bt = 'Plain'
+
+if algorithm_data['verbose'] == '':
+    vb = 0
+else: 
+    vb = int(algorithm_data['verbose'])
+
+ds = algorithm_data['dataset']
+if ds == "":
+    ds = "CICIDS2017_sample_km.csv"
+
+if algorithm_data['random_state'] == '':
+    rs = None
+else: 
+    rs = algorithm_data['random_state']
+
+if algorithm_data['learning_rate'] == '':
+    lr = None
+else:
+    lr = algorithm_data['learning_rate']
+
+
+print(f'Algorithm Data: {algorithm_data}')
+print(f'boosting_type: {bt}')
+print(f'verbose: {vb}')
+print(f'random_state: {rs}')
+print(f'learning_rate: {lr}')
+
+
 
 # ## Read the sampled CICIDS2017 dataset
 # The CICIDS2017 dataset is publicly available at: https://www.unb.ca/cic/datasets/ids-2017.html  
@@ -44,8 +113,8 @@ from statistics import mode
 
 # In[3]:
 
-
-df = pd.read_csv("./data/CICIDS2017_sample_km.csv")
+dataset = "./data/" + ds
+df = pd.read_csv(dataset)
 
 
 # In[4]:
@@ -115,69 +184,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import json
 
-
-def getinputs():    
-    try:
-        # Make a GET request to the endpoint
-        response = requests.get('http://127.0.0.1:5000/fetch-data/lccde')
-        
-        # Check if the request was successful (status code 200)
-        if response.status_code == 200:
-            # If successful, return the JSON data
-            return response.json()
-        else:
-            # If not successful, print an error message
-            print("Error:", response.status_code)
-            return None
-    except requests.exceptions.RequestException as e:
-        # Handle any exceptions that occur during the request
-        print("Exception:", e)
-        return None
-
-# print('RESPONSES ON HERE: ' + json.dumps(getinputs()))
-
-# lgbm_ins = getinputs()
-# values = lgbm_ins['inputlist'] # for loop
-
-# Convert the JSON object into a Python list
-# json_inputs = json.dumps(getinputs())
-
-# file_path = "example.txt"
-
-# with open(file_path, 'w') as file:
-#     # Write content into the file
-#     file.write(json.dumps(getinputs()))
-#     # file.write('ag_data: ' + algorithm_data)
-
-# print("File created successfully!")
-test = json.dumps(getinputs())
-algorithm_data = json.loads(test)
-# algorithm_data = ['boosting_type']
-
-# algorithm_data = json.loads(json_inputs).to_dict();
-# algorithm_data = data[0]  # Assuming there's only one entry in the 'lccde' list
-# input_list = algorithm_data['algo_input_list']
-#for input in input_list: 
-bt = algorithm_data['boosting_type']
-if bt == '':
-    bt = 'Plain'
-if algorithm_data['verbose'] == '':
-    vb = 0
-else: 
-    vb = int(algorithm_data['verbose'])
-ds = algorithm_data['dataset']
-
-# Print the extracted values
-print(f'verbose: {vb}')
-print(f'Algorithm Data: {algorithm_data}')
-# print(f'Input list: {input_list}')
-print(f'boosting_type: {bt}')
-
-
 # Start timing
 start_time = time.time()
 # Train the LightGBM algorithm
-lg = lgb.LGBMClassifier()
+lg = lgb.LGBMClassifier(random_state=rs, learning_rate=lr)
 lg.fit(X_train, y_train)
 y_pred = lg.predict(X_test)
 print(classification_report(y_test,y_pred))
@@ -237,7 +247,7 @@ import seaborn as sns
 start_time = time.time()
 
 # Train the XGBoost algorithm
-xg = xgb.XGBClassifier()
+xg = xgb.XGBClassifier(random_state=rs, learning_rate=lr)
 
 X_train_x = X_train.values
 X_test_x = X_test.values

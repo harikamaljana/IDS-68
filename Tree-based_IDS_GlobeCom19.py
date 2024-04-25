@@ -39,7 +39,7 @@ from xgboost import plot_importance
 def getinputs():    
     try:
         # Make a GET request to the endpoint
-        response = requests.get('http://127.0.0.1:5000/fetch-data/lccde')
+        response = requests.get('http://127.0.0.1:5000/fetch-data/tree')
         
         # Check if the request was successful (status code 200)
         if response.status_code == 200:
@@ -56,10 +56,58 @@ def getinputs():
 
 # print('RESPONSES ON HERE: ' + json.dumps(getinputs()))
 
-lgbm_ins = getinputs()
-# values = lgbm_ins['model']['input_list'] # for loop
+test = json.dumps(getinputs())
+algorithm_data = json.loads(test)
 
-print (json.dumps(lgbm_ins))
+print(f'Algorithm Data: {algorithm_data}')
+
+ds = algorithm_data['dataset']
+if ds == "":
+    ds = "CICIDS2017_sample.csv"
+
+if algorithm_data['random_state'] == '':
+    rs = 0
+else: 
+    rs = int(algorithm_data['random_state'])
+
+if algorithm_data['learning_rate'] == '':
+    lr = None
+else:
+    lr = float(algorithm_data['learning_rate'])
+
+if algorithm_data['n_estimator'] == '':
+    ne = 10
+else: 
+    ne = int(algorithm_data['n_estimator'])
+
+if algorithm_data['max_depth'] == '':
+    md = None
+else :
+    md = int(algorithm_data['max_depth'])
+
+if algorithm_data['max_feature'] == '':
+    mf = None
+else :
+    mf = int(algorithm_data['max_feature'])
+
+if algorithm_data['min_samples_split'] == '':
+    mss = 0.1
+else :
+    mss = int(algorithm_data['min_samples_split'])
+
+if algorithm_data['min_samples_leaf'] == '':
+    msl = 0.1
+else :
+    msl = float(algorithm_data['min_samples_leaf'])
+
+print(f'Algorithm Data: {algorithm_data}')
+print(f'random_state: {rs}')
+print(f'learning_rate: {lr}')
+print(f'n_estimator: {ne}')
+print(f'max_depth: {lr}')
+print(f'max_feature: {mf}')
+print(f'min_samples_split: {mss}')
+print(f'min_samples_leaf: {msl}')
 
 
 # ## Read the sampled CICIDS2017 dataset
@@ -128,8 +176,8 @@ print (json.dumps(lgbm_ins))
 
 # In[4]:
 
-
-df = pd.read_csv('./data/CICIDS2017_sample.csv')
+dataset = "./data/" + ds
+df = pd.read_csv(dataset)
 
 
 # In[5]:
@@ -199,7 +247,7 @@ pd.Series(y_train).value_counts()
 
 # Decision tree training and prediction
 y_test = y_test.astype('int')
-dt = DecisionTreeClassifier(random_state = 0)
+dt = DecisionTreeClassifier(random_state = rs, max_depth=md, max_features=mf, min_samples_split=mss, min_samples_leaf=msl)
 dt.fit(X_train,y_train) 
 dt_score=dt.score(X_test,y_test)
 y_predict=dt.predict(X_test)
@@ -230,7 +278,7 @@ dt_test=dt.predict(X_test)
 
 
 # Random Forest training and prediction
-rf = RandomForestClassifier(random_state = 0)
+rf = RandomForestClassifier(random_state = rs, max_depth=md, max_features=mf, min_samples_split=mss, min_samples_leaf=msl)
 rf.fit(X_train,y_train) 
 rf_score=rf.score(X_test,y_test)
 y_predict=rf.predict(X_test)
@@ -261,7 +309,7 @@ rf_test=rf.predict(X_test)
 
 
 # Extra trees training and prediction
-et = ExtraTreesClassifier(random_state = 0)
+et = ExtraTreesClassifier(random_state = rs, max_depth=md, max_features=mf, min_samples_split=mss, min_samples_leaf=msl)
 et.fit(X_train,y_train) 
 et_score=et.score(X_test,y_test)
 y_predict=et.predict(X_test)
@@ -292,7 +340,7 @@ et_test=et.predict(X_test)
 
 
 # XGboost training and prediction
-xg = xgb.XGBClassifier(n_estimators = 10)
+xg = xgb.XGBClassifier(n_estimators = ne, learning_rate=lr)
 xg.fit(X_train,y_train)
 xg_score=xg.score(X_test,y_test)
 y_predict=xg.predict(X_test)
@@ -487,7 +535,7 @@ pd.Series(y_train).value_counts()
 
 
 y_test = y_test.astype('int')
-dt = DecisionTreeClassifier(random_state = 0)
+dt = DecisionTreeClassifier(random_state = rs, max_depth=md, max_features=mf, min_samples_split=mss, min_samples_leaf=msl)
 dt.fit(X_train,y_train) 
 dt_score=dt.score(X_test,y_test)
 y_predict=dt.predict(X_test)
@@ -517,7 +565,7 @@ dt_test=dt.predict(X_test)
 # In[43]:
 
 
-rf = RandomForestClassifier(random_state = 0)
+rf = RandomForestClassifier(random_state = rs, max_depth=md, max_features=mf, min_samples_split=mss, min_samples_leaf=msl)
 rf.fit(X_train,y_train) # modelin veri üzerinde öğrenmesi fit fonksiyonuyla yapılıyor
 rf_score=rf.score(X_test,y_test)
 y_predict=rf.predict(X_test)
@@ -547,7 +595,7 @@ rf_test=rf.predict(X_test)
 # In[45]:
 
 
-et = ExtraTreesClassifier(random_state = 0)
+et = ExtraTreesClassifier(random_state = rs, max_depth=md, max_features=mf, min_samples_split=mss, min_samples_leaf=msl)
 et.fit(X_train,y_train) 
 et_score=et.score(X_test,y_test)
 y_predict=et.predict(X_test)
@@ -577,7 +625,7 @@ et_test=et.predict(X_test)
 # In[47]:
 
 
-xg = xgb.XGBClassifier(n_estimators = 10)
+xg = xgb.XGBClassifier(n_estimators = ne, learning_rate=lr)
 xg.fit(X_train,y_train)
 xg_score=xg.score(X_test,y_test)
 y_predict=xg.predict(X_test)
