@@ -38,9 +38,12 @@ def fetch_timestamps(model):
     model_docs = algorithm_table_ref.order_by('timestamp', direction=firestore.Query.DESCENDING).limit(10).get()
     
     for doc in model_docs:
+        # print(doc.to_dict()['timestamp'].astimezone(pytz.timezone('US/Central')))
         timestamps.append(doc.to_dict()['timestamp'])
-    
-    return jsonify({'timestamps': timestamps})
+        
+    # print(timestamps)
+    # print(timestamps)    
+    return {'timestamps': timestamps}
 
 @app.route('/fetch-data/<model>', methods=['GET'])
 def fetch_data(model):
@@ -62,6 +65,12 @@ def fetch_data(model):
         
     return json.dumps(first_doc)
     
+
+@app.route('/fetch-output-data/<model>/<id>', methods=['GET'])
+def fetch_output_data(model, id):
+    print('id is ' + json.dumps(id))
+    return {'id': id}
+    # get_data(model, id)
 
 @app.route('/run-model/<model>', methods=['POST'])
 def run_model(model):
@@ -137,6 +146,19 @@ def run_model(model):
 @app.route('/get_heatmap/<path:filename>', methods=['GET'])
 def get_heatmap(filename):
     return send_file(os.path.join('heatmaps', filename), mimetype='image/png')
+
+def get_data(model, id):
+    doc_ref = db.collection(model).document(id)
+    # Get the document
+    doc = doc_ref.get()
+    if doc.exists:
+        # Document exists, access its data
+        data = doc.to_dict()
+        print("Document data:", data)
+    else:
+        # Document does not exist
+        print("Document does not exist")
+    
 
 def store_data(model, req, time):
     storage_id = model + "." + time.strftime("%Y-%m-%d_%H:%M:%S")

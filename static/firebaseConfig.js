@@ -248,6 +248,7 @@ function runModel(model) {
 
 // Fetch timestamps for a given model
 function fetchTimestamps(model) {
+    console.log('fetching data for ' + model)
     fetch(`/fetch-timestamps/${model}`)
     .then(response => response.json())
     .then(data => {
@@ -258,24 +259,29 @@ function fetchTimestamps(model) {
         const timestamps = data.timestamps;
         timestamps.forEach(timestamp => {
             // Create a new option element for each timestamp
-            const option1 = document.createElement('a');
-            option1.href = '#';
-            option1.textContent = timestamp;
-            option1.addEventListener('click', () => {
+            const left_option = document.createElement('a');
+            left_option.href = '#';
+            left_option.textContent = timestamp;
+            left_option.addEventListener('click', () => {
+                // console.log(document.getElementById(model+'-dropdown-content-left'))
+                getrunbyID(model, timestamp);
                 // Set the selected timestamp in the input field or perform any other action
                 // Example: document.getElementById('timestamp-input').value = timestamp;
             });
             // Create a new option element for each timestamp
-            const option2 = document.createElement('a');
-            option2.href = '#';
-            option2.textContent = timestamp;
-            option2.addEventListener('click', () => {
+            const right_option = document.createElement('a');
+            right_option.href = '#';
+            right_option.textContent = timestamp;
+            right_option.addEventListener('click', () => {
+                print(getrunbyID(model, timestamp))
+                // console.log(document.getElementById(model+'-dropdown-content-right'))
+                // getrunbyID(model, document.getElementById(model+'-dropown-content-right'));
                 // Set the selected timestamp in the input field or perform any other action
                 // Example: document.getElementById('timestamp-input').value = timestamp;
             });
             // Append the option to both dropdown menus
-            dropdown1.appendChild(option1);
-            dropdown2.appendChild(option2);
+            dropdown1.appendChild(left_option);
+            dropdown2.appendChild(right_option);
         });
     })
     .catch(error => {
@@ -283,15 +289,24 @@ function fetchTimestamps(model) {
     });
 }
 
-
-
-// Call fetchTimestamps for each model when the page loads
-window.addEventListener('load', () => {
-    fetchTimestamps('lccde');
-    fetchTimestamps('tree');
-    fetchTimestamps('mth');
-});
-
+function getrunbyID(model, option_id){
+    return fetch('/fetch-output-data/' + model + '/' + option_id)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Handle the data or return it
+            return {'data': data, 'id': option_id};
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('Error fetching data:', error);
+            throw error; // Rethrow the error if necessary
+        });
+}
 
 function displayImages(images, model) {
     const container = document.getElementById(model + '-image-output-container');
@@ -306,7 +321,4 @@ function displayImages(images, model) {
     }
 }
 
-
-
-export { runModel };
-
+export { runModel, fetchTimestamps };
