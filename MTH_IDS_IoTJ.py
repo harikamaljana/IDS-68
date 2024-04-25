@@ -341,7 +341,8 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.show()
+plt.savefig("heatmaps/MTH_XGBoost.png")
+# plt.show()
 
 
 # #### Hyperparameter optimization (HPO) of XGBoost using Bayesian optimization with tree-based Parzen estimator (BO-TPE)
@@ -398,7 +399,8 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.show()
+plt.savefig("heatmaps/MTH_hyperopt_xgb.png")
+# plt.show()
 
 
 # In[115]:
@@ -429,7 +431,8 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.show()
+plt.savefig("heatmaps/MTH_RandomForest.png")
+# plt.show()
 
 
 # #### Hyperparameter optimization (HPO) of random forest using Bayesian optimization with tree-based Parzen estimator (BO-TPE)
@@ -492,7 +495,8 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.show()
+plt.savefig("heatmaps/MTH_hyperopt_rf.png")
+# plt.show()
 
 
 # In[105]:
@@ -523,7 +527,8 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.show()
+plt.savefig("heatmaps/MTH_DecisionTree.png")
+# plt.show()
 
 
 # #### Hyperparameter optimization (HPO) of decision tree using Bayesian optimization with tree-based Parzen estimator (BO-TPE)
@@ -584,7 +589,8 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.show()
+plt.savefig("heatmaps/MTH_hyperopt_dt.png")
+# plt.show()
 
 
 # In[102]:
@@ -615,7 +621,8 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.show()
+plt.savefig("heatmaps/MTH_ExtraTree.png")
+# plt.show()
 
 
 # #### Hyperparameter optimization (HPO) of extra trees using Bayesian optimization with tree-based Parzen estimator (BO-TPE)
@@ -678,7 +685,8 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.show()
+plt.savefig("heatmaps/MTH_hpyeropt_et.png")
+# plt.show()
 
 
 # In[109]:
@@ -747,7 +755,8 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.show()
+plt.savefig("heatmaps/MTH_stacking_xgb.png")
+# plt.show()
 
 
 # #### Hyperparameter optimization (HPO) of the stacking ensemble model (XGBoost) using Bayesian optimization with tree-based Parzen estimator (BO-TPE)
@@ -787,7 +796,6 @@ print("XGBoost: Hyperopt estimated optimum {}".format(best))
 
 # In[124]:
 
-print('working here line 790')
 
 xg = xgb.XGBClassifier(learning_rate= 0.19229249758051492, n_estimators = 30, max_depth = 36)
 xg.fit(x_train,y_train)
@@ -805,557 +813,557 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.show()
+plt.savefig("heatmaps/MTH_stacking_hyperopt_xgb.png")
+# plt.show()
 
-print('working here 810')
 
-# ## Anomaly-based IDS
+# # ## Anomaly-based IDS
 
-# ### Generate the port-scan datasets for unknown attack detection
+# # ### Generate the port-scan datasets for unknown attack detection
 
-# In[131]:
+# # In[131]:
 
 
-df=pd.read_csv('./data/CICIDS2017_sample_km.csv')
+# df=pd.read_csv('./data/CICIDS2017_sample_km.csv')
 
 
-# In[132]:
+# # In[132]:
 
 
-df.Label.value_counts()
+# df.Label.value_counts()
 
 
-# In[144]:
+# # In[144]:
 
 
-df1 = df[df['Label'] != 5]
-df1['Label'][df1['Label'] > 0] = 1
-df1.to_csv('./data/CICIDS2017_sample_km_without_portscan.csv',index=0)
+# df1 = df[df['Label'] != 5]
+# df1['Label'][df1['Label'] > 0] = 1
+# df1.to_csv('./data/CICIDS2017_sample_km_without_portscan.csv',index=0)
 
 
-# In[145]:
+# # In[145]:
 
 
-df2 = df[df['Label'] == 5]
-df2['Label'][df2['Label'] == 5] = 1
-df2.to_csv('./data/CICIDS2017_sample_km_portscan.csv',index=0)
+# df2 = df[df['Label'] == 5]
+# df2['Label'][df2['Label'] == 5] = 1
+# df2.to_csv('./data/CICIDS2017_sample_km_portscan.csv',index=0)
 
 
-# ### Read the generated datasets for unknown attack detection
+# # ### Read the generated datasets for unknown attack detection
 
-# In[67]:
+# # In[67]:
 
 
-df1 = pd.read_csv('./data/CICIDS2017_sample_km_without_portscan.csv')
-df2 = pd.read_csv('./data/CICIDS2017_sample_km_portscan.csv')
+# df1 = pd.read_csv('./data/CICIDS2017_sample_km_without_portscan.csv')
+# df2 = pd.read_csv('./data/CICIDS2017_sample_km_portscan.csv')
 
 
-# In[68]:
+# # In[68]:
 
 
-features = df1.drop(['Label'],axis=1).dtypes[df1.dtypes != 'object'].index
-df1[features] = df1[features].apply(
-    lambda x: (x - x.mean()) / (x.std()))
-df2[features] = df2[features].apply(
-    lambda x: (x - x.mean()) / (x.std()))
-df1 = df1.fillna(0)
-df2 = df2.fillna(0)
+# features = df1.drop(['Label'],axis=1).dtypes[df1.dtypes != 'object'].index
+# df1[features] = df1[features].apply(
+#     lambda x: (x - x.mean()) / (x.std()))
+# df2[features] = df2[features].apply(
+#     lambda x: (x - x.mean()) / (x.std()))
+# df1 = df1.fillna(0)
+# df2 = df2.fillna(0)
 
 
-# In[69]:
+# # In[69]:
 
 
-df1.Label.value_counts()
+# df1.Label.value_counts()
 
 
-# In[70]:
+# # In[70]:
 
 
-df2.Label.value_counts()
+# df2.Label.value_counts()
 
 
-# In[71]:
+# # In[71]:
 
 
-df2p=df1[df1['Label']==0]
-df2pp=df2p.sample(n=None, frac=1255/18225, replace=False, weights=None, random_state=None, axis=0)
-df2=pd.concat([df2, df2pp])
+# df2p=df1[df1['Label']==0]
+# df2pp=df2p.sample(n=None, frac=1255/18225, replace=False, weights=None, random_state=None, axis=0)
+# df2=pd.concat([df2, df2pp])
 
 
-# In[72]:
+# # In[72]:
 
 
-df2.Label.value_counts()
+# df2.Label.value_counts()
 
 
-# In[73]:
+# # In[73]:
 
-df = df1._append(df2)
+# df = df1._append(df2)
 
 
-# In[74]:
+# # In[74]:
 
 
-X = df.drop(['Label'],axis=1).values
-y = df.iloc[:, -1].values.reshape(-1,1)
-y=np.ravel(y)
-pd.Series(y).value_counts()
+# X = df.drop(['Label'],axis=1).values
+# y = df.iloc[:, -1].values.reshape(-1,1)
+# y=np.ravel(y)
+# pd.Series(y).value_counts()
 
 
-# ### Feature engineering (IG, FCBF, and KPCA)
+# # ### Feature engineering (IG, FCBF, and KPCA)
 
-# #### Feature selection by information gain (IG)
+# # #### Feature selection by information gain (IG)
 
-# In[75]:
+# # In[75]:
 
 
-from sklearn.feature_selection import mutual_info_classif
-importances = mutual_info_classif(X, y)
+# from sklearn.feature_selection import mutual_info_classif
+# importances = mutual_info_classif(X, y)
 
 
-# In[76]:
+# # In[76]:
 
 
-# calculate the sum of importance scores
-f_list = sorted(zip(map(lambda x: round(x, 4), importances), features), reverse=True)
-Sum = 0
-fs = []
-for i in range(0, len(f_list)):
-    Sum = Sum + f_list[i][0]
-    fs.append(f_list[i][1])
+# # calculate the sum of importance scores
+# f_list = sorted(zip(map(lambda x: round(x, 4), importances), features), reverse=True)
+# Sum = 0
+# fs = []
+# for i in range(0, len(f_list)):
+#     Sum = Sum + f_list[i][0]
+#     fs.append(f_list[i][1])
 
 
-# In[77]:
+# # In[77]:
 
 
-# select the important features from top to bottom until the accumulated importance reaches 90%
-f_list2 = sorted(zip(map(lambda x: round(x, 4), importances/Sum), features), reverse=True)
-Sum2 = 0
-fs = []
-for i in range(0, len(f_list2)):
-    Sum2 = Sum2 + f_list2[i][0]
-    fs.append(f_list2[i][1])
-    if Sum2>=0.9:
-        break        
-print('line 940')
+# # select the important features from top to bottom until the accumulated importance reaches 90%
+# f_list2 = sorted(zip(map(lambda x: round(x, 4), importances/Sum), features), reverse=True)
+# Sum2 = 0
+# fs = []
+# for i in range(0, len(f_list2)):
+#     Sum2 = Sum2 + f_list2[i][0]
+#     fs.append(f_list2[i][1])
+#     if Sum2>=0.9:
+#         break        
 
-# In[78]:
 
+# # In[78]:
 
-X_fs = df[fs].values
 
+# X_fs = df[fs].values
 
-# In[79]:
 
+# # In[79]:
 
-X_fs.shape
 
+# X_fs.shape
 
-# In[80]:
 
+# # In[80]:
 
-X_fs
 
+# X_fs
 
-# #### Feature selection by Fast Correlation Based Filter (FCBF)
-# 
-# The module is imported from the GitHub repo: https://github.com/SantiagoEG/FCBF_module
 
-# In[81]:
+# # #### Feature selection by Fast Correlation Based Filter (FCBF)
+# # 
+# # The module is imported from the GitHub repo: https://github.com/SantiagoEG/FCBF_module
 
+# # In[81]:
 
-from FCBF_module import FCBF, FCBFK, FCBFiP, get_i
-fcbf = FCBFK(k = 20)
-#fcbf.fit(X_fs, y)
 
+# from FCBF_module import FCBF, FCBFK, FCBFiP, get_i
+# fcbf = FCBFK(k = 20)
+# #fcbf.fit(X_fs, y)
 
-# In[82]:
 
+# # In[82]:
 
-X_fss = fcbf.fit_transform(X_fs,y)
 
+# X_fss = fcbf.fit_transform(X_fs,y)
 
-# In[83]:
 
+# # In[83]:
 
-X_fss.shape
 
+# X_fss.shape
 
-# In[84]:
 
+# # In[84]:
 
-X_fss
 
+# X_fss
 
-# ####  kernel principal component analysis (KPCA)
 
-# In[123]:
+# # ####  kernel principal component analysis (KPCA)
 
-print ('line 994')
-from sklearn.decomposition import KernelPCA
-kpca = KernelPCA(n_components = 10, kernel = 'rbf')
-kpca.fit(X_fss, y)
-X_kpca = kpca.transform(X_fss)
+# # In[123]:
 
-# from sklearn.decomposition import PCA
-# kpca = PCA(n_components = 10)
+
+# from sklearn.decomposition import KernelPCA
+# kpca = KernelPCA(n_components = 10, kernel = 'rbf')
 # kpca.fit(X_fss, y)
 # X_kpca = kpca.transform(X_fss)
 
-
-# ### Train-test split after feature selection
-
-# In[86]:
-
-
-X_train = X_kpca[:len(df1)]
-y_train = y[:len(df1)]
-X_test = X_kpca[len(df1):]
-y_test = y[len(df1):]
+# # from sklearn.decomposition import PCA
+# # kpca = PCA(n_components = 10)
+# # kpca.fit(X_fss, y)
+# # X_kpca = kpca.transform(X_fss)
 
 
-# ### Solve class-imbalance by SMOTE
+# # ### Train-test split after feature selection
 
-# In[87]:
-
-print ('line 1021')
-pd.Series(y_train).value_counts()
-print('line 1023')
-
-# In[88]:
+# # In[86]:
 
 
-from imblearn.over_sampling import SMOTE
-smote=SMOTE(n_jobs=-1,sampling_strategy={1:18225})
-X_train, y_train = smote.fit_resample(X_train, y_train)
+# X_train = X_kpca[:len(df1)]
+# y_train = y[:len(df1)]
+# X_test = X_kpca[len(df1):]
+# y_test = y[len(df1):]
 
 
-# In[89]:
+# # ### Solve class-imbalance by SMOTE
+
+# # In[87]:
 
 
-pd.Series(y_train).value_counts()
+# pd.Series(y_train).value_counts()
 
 
-# In[90]:
+# # In[88]:
 
 
-pd.Series(y_test).value_counts()
+# from imblearn.over_sampling import SMOTE
+# smote=SMOTE(n_jobs=-1,sampling_strategy={1:18225})
+# X_train, y_train = smote.fit_resample(X_train, y_train)
 
 
-# ### Apply the cluster labeling (CL) k-means method
-
-# In[91]:
+# # In[89]:
 
 
-from sklearn.cluster import KMeans
-from sklearn.cluster import DBSCAN,MeanShift
-from sklearn.cluster import SpectralClustering,AgglomerativeClustering,AffinityPropagation,Birch,MiniBatchKMeans,MeanShift 
-from sklearn.mixture import GaussianMixture, BayesianGaussianMixture
-from sklearn.metrics import classification_report
-from sklearn import metrics
+# pd.Series(y_train).value_counts()
 
 
-# In[124]:
-('line 1059')
-
-def CL_kmeans(X_train, X_test, y_train, y_test,n,b=100):
-    km_cluster = MiniBatchKMeans(n_clusters=n,batch_size=b)
-    result = km_cluster.fit_predict(X_train)
-    result2 = km_cluster.predict(X_test)
-
-    count=0
-    a=np.zeros(n)
-    b=np.zeros(n)
-    for v in range(0,n):
-        for i in range(0,len(y_train)):
-            if result[i]==v:
-                if y_train[i]==1:
-                    a[v]=a[v]+1
-                else:
-                    b[v]=b[v]+1
-    list1=[]
-    list2=[]
-    for v in range(0,n):
-        if a[v]<=b[v]:
-            list1.append(v)
-        else: 
-            list2.append(v)
-    for v in range(0,len(y_test)):
-        if result2[v] in list1:
-            result2[v]=0
-        elif result2[v] in list2:
-            result2[v]=1
-        else:
-            print("-1")
-    print(classification_report(y_test, result2))
-    cm=confusion_matrix(y_test,result2)
-    acc=metrics.accuracy_score(y_test,result2)
-    print(str(acc))
-    print(cm)
+# # In[90]:
 
 
-# In[94]:
+# pd.Series(y_test).value_counts()
 
 
-CL_kmeans(X_train, X_test, y_train, y_test, 8)
+# # ### Apply the cluster labeling (CL) k-means method
+
+# # In[91]:
 
 
-# ### Hyperparameter optimization of CL-k-means
-# Tune "k"
+# from sklearn.cluster import KMeans
+# from sklearn.cluster import DBSCAN,MeanShift
+# from sklearn.cluster import SpectralClustering,AgglomerativeClustering,AffinityPropagation,Birch,MiniBatchKMeans,MeanShift 
+# from sklearn.mixture import GaussianMixture, BayesianGaussianMixture
+# from sklearn.metrics import classification_report
+# from sklearn import metrics
 
-# In[120]:
 
-print('line 1108')
-#Hyperparameter optimization by BO-GP
-from skopt.space import Real, Integer
-from skopt.utils import use_named_args
-from sklearn import metrics
+# # In[124]:
 
-space  = [Integer(2, 50, name='n_clusters')]
-@use_named_args(space)
-def objective(**params):
-    km_cluster = MiniBatchKMeans(batch_size=100, **params)
-    n=params['n_clusters']
+
+# def CL_kmeans(X_train, X_test, y_train, y_test,n,b=100):
+#     km_cluster = MiniBatchKMeans(n_clusters=n,batch_size=b)
+#     result = km_cluster.fit_predict(X_train)
+#     result2 = km_cluster.predict(X_test)
+
+#     count=0
+#     a=np.zeros(n)
+#     b=np.zeros(n)
+#     for v in range(0,n):
+#         for i in range(0,len(y_train)):
+#             if result[i]==v:
+#                 if y_train[i]==1:
+#                     a[v]=a[v]+1
+#                 else:
+#                     b[v]=b[v]+1
+#     list1=[]
+#     list2=[]
+#     for v in range(0,n):
+#         if a[v]<=b[v]:
+#             list1.append(v)
+#         else: 
+#             list2.append(v)
+#     for v in range(0,len(y_test)):
+#         if result2[v] in list1:
+#             result2[v]=0
+#         elif result2[v] in list2:
+#             result2[v]=1
+#         else:
+#             print("-1")
+#     print(classification_report(y_test, result2))
+#     cm=confusion_matrix(y_test,result2)
+#     acc=metrics.accuracy_score(y_test,result2)
+#     print(str(acc))
+#     print(cm)
+
+
+# # In[94]:
+
+
+# CL_kmeans(X_train, X_test, y_train, y_test, 8)
+
+
+# # ### Hyperparameter optimization of CL-k-means
+# # Tune "k"
+
+# # In[120]:
+
+
+# #Hyperparameter optimization by BO-GP
+# from skopt.space import Real, Integer
+# from skopt.utils import use_named_args
+# from sklearn import metrics
+
+# space  = [Integer(2, 50, name='n_clusters')]
+# @use_named_args(space)
+# def objective(**params):
+#     km_cluster = MiniBatchKMeans(batch_size=100, **params)
+#     n=params['n_clusters']
     
-    result = km_cluster.fit_predict(X_train)
-    result2 = km_cluster.predict(X_test)
+#     result = km_cluster.fit_predict(X_train)
+#     result2 = km_cluster.predict(X_test)
 
-    count=0
-    a=np.zeros(n)
-    b=np.zeros(n)
-    for v in range(0,n):
-        for i in range(0,len(y_train)):
-            if result[i]==v:
-                if y_train[i]==1:
-                    a[v]=a[v]+1
-                else:
-                    b[v]=b[v]+1
-    list1=[]
-    list2=[]
-    for v in range(0,n):
-        if a[v]<=b[v]:
-            list1.append(v)
-        else: 
-            list2.append(v)
-    for v in range(0,len(y_test)):
-        if result2[v] in list1:
-            result2[v]=0
-        elif result2[v] in list2:
-            result2[v]=1
-        else:
-            print("-1")
-    cm=metrics.accuracy_score(y_test,result2)
-    print(str(n)+" "+str(cm))
-    return (1-cm)
-from skopt import gp_minimize
-import time
-t1=time.time()
-res_gp = gp_minimize(objective, space, n_calls=20, random_state=0)
-t2=time.time()
-print(t2-t1)
-print("Best score=%.4f" % (1-res_gp.fun))
-print("""Best parameters: n_clusters=%d""" % (res_gp.x[0]))
-
-
-# In[121]:
+#     count=0
+#     a=np.zeros(n)
+#     b=np.zeros(n)
+#     for v in range(0,n):
+#         for i in range(0,len(y_train)):
+#             if result[i]==v:
+#                 if y_train[i]==1:
+#                     a[v]=a[v]+1
+#                 else:
+#                     b[v]=b[v]+1
+#     list1=[]
+#     list2=[]
+#     for v in range(0,n):
+#         if a[v]<=b[v]:
+#             list1.append(v)
+#         else: 
+#             list2.append(v)
+#     for v in range(0,len(y_test)):
+#         if result2[v] in list1:
+#             result2[v]=0
+#         elif result2[v] in list2:
+#             result2[v]=1
+#         else:
+#             print("-1")
+#     cm=metrics.accuracy_score(y_test,result2)
+#     print(str(n)+" "+str(cm))
+#     return (1-cm)
+# from skopt import gp_minimize
+# import time
+# t1=time.time()
+# res_gp = gp_minimize(objective, space, n_calls=20, random_state=0)
+# t2=time.time()
+# print(t2-t1)
+# print("Best score=%.4f" % (1-res_gp.fun))
+# print("""Best parameters: n_clusters=%d""" % (res_gp.x[0]))
 
 
-#Hyperparameter optimization by BO-TPE
-from hyperopt import hp, fmin, tpe, STATUS_OK, Trials
-from sklearn.model_selection import cross_val_score, StratifiedKFold
-from sklearn.cluster import MiniBatchKMeans
-from sklearn import metrics
+# # In[121]:
 
-def objective(params):
-    params = {
-        'n_clusters': int(params['n_clusters']), 
-    }
-    km_cluster = MiniBatchKMeans(batch_size=100, **params)
-    n=params['n_clusters']
+
+# #Hyperparameter optimization by BO-TPE
+# from hyperopt import hp, fmin, tpe, STATUS_OK, Trials
+# from sklearn.model_selection import cross_val_score, StratifiedKFold
+# from sklearn.cluster import MiniBatchKMeans
+# from sklearn import metrics
+
+# def objective(params):
+#     params = {
+#         'n_clusters': int(params['n_clusters']), 
+#     }
+#     km_cluster = MiniBatchKMeans(batch_size=100, **params)
+#     n=params['n_clusters']
     
-    result = km_cluster.fit_predict(X_train)
-    result2 = km_cluster.predict(X_test)
+#     result = km_cluster.fit_predict(X_train)
+#     result2 = km_cluster.predict(X_test)
 
-    count=0
-    a=np.zeros(n)
-    b=np.zeros(n)
-    for v in range(0,n):
-        for i in range(0,len(y_train)):
-            if result[i]==v:
-                if y_train[i]==1:
-                    a[v]=a[v]+1
-                else:
-                    b[v]=b[v]+1
-    list1=[]
-    list2=[]
-    for v in range(0,n):
-        if a[v]<=b[v]:
-            list1.append(v)
-        else: 
-            list2.append(v)
-    for v in range(0,len(y_test)):
-        if result2[v] in list1:
-            result2[v]=0
-        elif result2[v] in list2:
-            result2[v]=1
-        else:
-            print("-1")
-    score=metrics.accuracy_score(y_test,result2)
-    print(str(params['n_clusters'])+" "+str(score))
-    return {'loss':1-score, 'status': STATUS_OK }
-space = {
-    'n_clusters': hp.quniform('n_clusters', 2, 50, 1),
-}
+#     count=0
+#     a=np.zeros(n)
+#     b=np.zeros(n)
+#     for v in range(0,n):
+#         for i in range(0,len(y_train)):
+#             if result[i]==v:
+#                 if y_train[i]==1:
+#                     a[v]=a[v]+1
+#                 else:
+#                     b[v]=b[v]+1
+#     list1=[]
+#     list2=[]
+#     for v in range(0,n):
+#         if a[v]<=b[v]:
+#             list1.append(v)
+#         else: 
+#             list2.append(v)
+#     for v in range(0,len(y_test)):
+#         if result2[v] in list1:
+#             result2[v]=0
+#         elif result2[v] in list2:
+#             result2[v]=1
+#         else:
+#             print("-1")
+#     score=metrics.accuracy_score(y_test,result2)
+#     print(str(params['n_clusters'])+" "+str(score))
+#     return {'loss':1-score, 'status': STATUS_OK }
+# space = {
+#     'n_clusters': hp.quniform('n_clusters', 2, 50, 1),
+# }
 
-best = fmin(fn=objective,
-            space=space,
-            algo=tpe.suggest,
-            max_evals=20)
-print("Random Forest: Hyperopt estimated optimum {}".format(best))
-
-
-# In[122]:
+# best = fmin(fn=objective,
+#             space=space,
+#             algo=tpe.suggest,
+#             max_evals=20)
+# print("Random Forest: Hyperopt estimated optimum {}".format(best))
 
 
-CL_kmeans(X_train, X_test, y_train, y_test, 16)
+# # In[122]:
 
 
-# ### Apply the CL-k-means model with biased classifiers
-
-# In[125]:
+# CL_kmeans(X_train, X_test, y_train, y_test, 16)
 
 
-# Only a sample code to show the logic. It needs to work on the entire dataset to generate sufficient training samples for biased classifiers
-def Anomaly_IDS(X_train, X_test, y_train, y_test,n,b=100):
-    # CL-kmeans
-    km_cluster = MiniBatchKMeans(n_clusters=n,batch_size=b)
-    result = km_cluster.fit_predict(X_train)
-    result2 = km_cluster.predict(X_test)
+# # ### Apply the CL-k-means model with biased classifiers
 
-    count=0
-    a=np.zeros(n)
-    b=np.zeros(n)
-    for v in range(0,n):
-        for i in range(0,len(y_train)):
-            if result[i]==v:
-                if y_train[i]==1:
-                    a[v]=a[v]+1
-                else:
-                    b[v]=b[v]+1
-    list1=[]
-    list2=[]
-    for v in range(0,n):
-        if a[v]<=b[v]:
-            list1.append(v)
-        else: 
-            list2.append(v)
-    for v in range(0,len(y_test)):
-        if result2[v] in list1:
-            result2[v]=0
-        elif result2[v] in list2:
-            result2[v]=1
-        else:
-            print("-1")
-    print(classification_report(y_test, result2))
-    cm=confusion_matrix(y_test,result2)
-    acc=metrics.accuracy_score(y2,result2)
-    print(str(acc))
-    print(cm)
+# # In[125]:
+
+
+# # Only a sample code to show the logic. It needs to work on the entire dataset to generate sufficient training samples for biased classifiers
+# def Anomaly_IDS(X_train, X_test, y_train, y_test,n,b=100):
+#     # CL-kmeans
+#     km_cluster = MiniBatchKMeans(n_clusters=n,batch_size=b)
+#     result = km_cluster.fit_predict(X_train)
+#     result2 = km_cluster.predict(X_test)
+
+#     count=0
+#     a=np.zeros(n)
+#     b=np.zeros(n)
+#     for v in range(0,n):
+#         for i in range(0,len(y_train)):
+#             if result[i]==v:
+#                 if y_train[i]==1:
+#                     a[v]=a[v]+1
+#                 else:
+#                     b[v]=b[v]+1
+#     list1=[]
+#     list2=[]
+#     for v in range(0,n):
+#         if a[v]<=b[v]:
+#             list1.append(v)
+#         else: 
+#             list2.append(v)
+#     for v in range(0,len(y_test)):
+#         if result2[v] in list1:
+#             result2[v]=0
+#         elif result2[v] in list2:
+#             result2[v]=1
+#         else:
+#             print("-1")
+#     print(classification_report(y_test, result2))
+#     cm=confusion_matrix(y_test,result2)
+#     acc=metrics.accuracy_score(y2p,result2)
+#     print(str(acc))
+#     print(cm)
     
-    #Biased classifier construction
-    count=0
-    print(len(y))
-    a=np.zeros(n)
-    b=np.zeros(n)
-    FNL=[]
-    FPL=[]
-    for v in range(0,n):
-        al=[]
-        bl=[]
-        for i in range(0,len(y)):   
-            if result[i]==v:        
-                if y[i]==1:        #label 1
-                    a[v]=a[v]+1
-                    al.append(i)
-                else:             #label 0
-                    b[v]=b[v]+1
-                    bl.append(i)
-        if a[v]<=b[v]:
-            FNL.extend(al)
-        else:
-            FPL.extend(bl)
-        #print(str(v)+"="+str(a[v]/(a[v]+b[v])))
+#     #Biased classifier construction
+#     count=0
+#     print(len(y))
+#     a=np.zeros(n)
+#     b=np.zeros(n)
+#     FNL=[]
+#     FPL=[]
+#     for v in range(0,n):
+#         al=[]
+#         bl=[]
+#         for i in range(0,len(y)):   
+#             if result[i]==v:        
+#                 if y[i]==1:        #label 1
+#                     a[v]=a[v]+1
+#                     al.append(i)
+#                 else:             #label 0
+#                     b[v]=b[v]+1
+#                     bl.append(i)
+#         if a[v]<=b[v]:
+#             FNL.extend(al)
+#         else:
+#             FPL.extend(bl)
+#         #print(str(v)+"="+str(a[v]/(a[v]+b[v])))
         
-    dffp=df.iloc[FPL, :]
-    dffn=df.iloc[FNL, :]
-    dfva0=df[df['Label']==0]
-    dfva1=df[df['Label']==1]
+#     dffp=df.iloc[FPL, :]
+#     dffn=df.iloc[FNL, :]
+#     dfva0=df[df['Label']==0]
+#     dfva1=df[df['Label']==1]
     
-    dffpp=dfva1.sample(n=None, frac=len(FPL)/dfva1.shape[0], replace=False, weights=None, random_state=None, axis=0)
-    dffnp=dfva0.sample(n=None, frac=len(FNL)/dfva0.shape[0], replace=False, weights=None, random_state=None, axis=0)
+#     dffpp=dfva1.sample(n=None, frac=len(FPL)/dfva1.shape[0], replace=False, weights=None, random_state=None, axis=0)
+#     dffnp=dfva0.sample(n=None, frac=len(FNL)/dfva0.shape[0], replace=False, weights=None, random_state=None, axis=0)
     
-    dffp_f=pd.concat([dffp, dffpp])
-    dffn_f=pd.concat([dffn, dffnp])
+#     dffp_f=pd.concat([dffp, dffpp])
+#     dffn_f=pd.concat([dffn, dffnp])
     
-    Xp = dffp_f.drop(['Label'],axis=1)  
-    yp = dffp_f.iloc[:, -1].values.reshape(-1,1)
-    yp=np.ravel(yp)
+#     Xp = dffp_f.drop(['Label'],axis=1)  
+#     yp = dffp_f.iloc[:, -1].values.reshape(-1,1)
+#     yp=np.ravel(yp)
 
-    Xn = dffn_f.drop(['Label'],axis=1)  
-    yn = dffn_f.iloc[:, -1].values.reshape(-1,1)
-    yn=np.ravel(yn)
+#     Xn = dffn_f.drop(['Label'],axis=1)  
+#     yn = dffn_f.iloc[:, -1].values.reshape(-1,1)
+#     yn=np.ravel(yn)
     
-    rfp = RandomForestClassifier(random_state = 0)
-    rfp.fit(Xp,yp)
-    rfn = RandomForestClassifier(random_state = 0)
-    rfn.fit(Xn,yn)
+#     rfp = RandomForestClassifier(random_state = 0)
+#     rfp.fit(Xp,yp)
+#     rfn = RandomForestClassifier(random_state = 0)
+#     rfn.fit(Xn,yn)
 
-    dffnn_f=pd.concat([dffn, dffnp])
+#     dffnn_f=pd.concat([dffn, dffnp])
     
-    Xnn = dffn_f.drop(['Label'],axis=1)  
-    ynn = dffn_f.iloc[:, -1].values.reshape(-1,1)
-    ynn=np.ravel(ynn)
+#     Xnn = dffn_f.drop(['Label'],axis=1)  
+#     ynn = dffn_f.iloc[:, -1].values.reshape(-1,1)
+#     ynn=np.ravel(ynn)
 
-    rfnn = RandomForestClassifier(random_state = 0)
-    rfnn.fit(Xnn,ynn)
+#     rfnn = RandomForestClassifier(random_state = 0)
+#     rfnn.fit(Xnn,ynn)
 
-    X2p = df2.drop(['Label'],axis=1) 
-    y2p = df2.iloc[:, -1].values.reshape(-1,1)
-    y2p=np.ravel(y2p)
+#     X2p = df2.drop(['Label'],axis=1) 
+#     y2p = df2.iloc[:, -1].values.reshape(-1,1)
+#     y2p=np.ravel(y2p)
 
-    result2 = km_cluster.predict(X2p)
+#     result2 = km_cluster.predict(X2p)
 
-    count=0
-    a=np.zeros(n)
-    b=np.zeros(n)
-    for v in range(0,n):
-        for i in range(0,len(y)):
-            if result[i]==v:
-                if y[i]==1:
-                    a[v]=a[v]+1
-                else:
-                    b[v]=b[v]+1
-    list1=[]
-    list2=[]
-    l1=[]
-    l0=[]
-    for v in range(0,n):
-        if a[v]<=b[v]:
-            list1.append(v)
-        else: 
-            list2.append(v)
-    for v in range(0,len(y2p)):
-        if result2[v] in list1:
-            result2[v]=0
-            l0.append(v)
-        elif result2[v] in list2:
-            result2[v]=1
-            l1.append(v)
-        else:
-            print("-1")
-    print(classification_report(y2p, result2))
-    cm=confusion_matrix(y2p,result2)
-    print(cm)
+#     count=0
+#     a=np.zeros(n)
+#     b=np.zeros(n)
+#     for v in range(0,n):
+#         for i in range(0,len(y)):
+#             if result[i]==v:
+#                 if y[i]==1:
+#                     a[v]=a[v]+1
+#                 else:
+#                     b[v]=b[v]+1
+#     list1=[]
+#     list2=[]
+#     l1=[]
+#     l0=[]
+#     for v in range(0,n):
+#         if a[v]<=b[v]:
+#             list1.append(v)
+#         else: 
+#             list2.append(v)
+#     for v in range(0,len(y2p)):
+#         if result2[v] in list1:
+#             result2[v]=0
+#             l0.append(v)
+#         elif result2[v] in list2:
+#             result2[v]=1
+#             l1.append(v)
+#         else:
+#             print("-1")
+#     print(classification_report(y2p, result2))
+#     cm=confusion_matrix(y2p,result2)
+#     print(cm)
 
 
 # 95% of the code has been shared, and the remaining 5% is retained for future extension.  

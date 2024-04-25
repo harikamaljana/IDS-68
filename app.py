@@ -7,6 +7,7 @@ from firebase_admin import credentials, firestore
 import json
 from datetime import datetime
 from google.cloud import firestore
+import pytz
 
 # Initialize Firebase Admin SDK
 cred = firebase_admin.credentials.Certificate("./idst68-firebase-adminsdk-zynhs-075a598f91.json")
@@ -54,7 +55,7 @@ def fetch_data(model):
 @app.route('/run-model/<model>', methods=['POST'])
 def run_model(model):
     try:
-        time = datetime.now()
+        time = datetime.now(pytz.timezone('US/Central'))
         print('updated with the right model' + model)
         req = request.json
         # print('PICKED with the right model' + json.dumps(req, indent=4))
@@ -66,7 +67,20 @@ def run_model(model):
         else:
             modelFile='MTH_IDS_IoTJ.py'
         
+        import os
+
+        # Specify the directory path you want to create
         heatmaps_dir = './heatmaps/'  # Update this to your actual directory
+
+        # Check if the directory already exists
+        if not os.path.exists(heatmaps_dir):
+            # Create the directory if it doesn't exist
+            os.makedirs(heatmaps_dir)
+            print("Directory created successfully.")
+        else:
+            print("Directory already exists.")
+        
+        
         print('correct modelfile is selected' + model)
         # Load and encode images under the heatmaps directory
         if os.listdir(heatmaps_dir):
