@@ -685,7 +685,7 @@ f,ax=plt.subplots(figsize=(5,5))
 sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
-plt.savefig("heatmaps/MTH_hpyeropt_et.png")
+plt.savefig("heatmaps/MTH_hyperopt_et.png")
 # plt.show()
 
 

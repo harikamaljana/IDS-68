@@ -175,7 +175,7 @@ def store_heatmap(model, req, time):
     elif (model == 'tree'):
         filenames = ['TB_DecisionTree.png', 'TB_ExtraTrees.png', 'TB_FS_DecisionTree.png', 'TB_FS_ExtraTrees.png', 'TB_FS_RandomForest.png', 'TB_FS_StackModel.png', 'TB_FS_XGB.png', 'TB_RandomForest.png', 'TB_StackModel.png', 'TB_XGB.png']
     else:
-        filenames = []
+        filenames = ['MTH_DecisionTree.png', 'MTH_ExtraTree.png', 'MTH_hyperopt_et.png', 'MTH_hyperopt_dt.png', 'MTH_hyperopt_rf.png', 'MTH_hyperopt_xgb.png', 'MTH_RandomForest.png', 'MTH_stacking_hyperopt_xgb.png', 'MTH_stacking_xgb.png', 'MTH_XGBoost.png']
     
     print('trying os gets')    
     files_directory = './heatmaps/'
