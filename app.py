@@ -56,7 +56,7 @@ def fetch_data(model):
     first_doc = model_docs[0]
     
     first_doc = first_doc.to_dict()
-    first_doc['timestamp'] = first_doc['timestamp'].isoformat()
+    # first_doc['timestamp'] = first_doc['timestamp'].isoformat()
         
     print(first_doc)
         
