@@ -262,7 +262,7 @@ function fetchTimestamps(model) {
                 // Create a new option element for each timestamp
                 const left_option = document.createElement('a');
                 left_option.href = '#';
-                left_option.textContent = timestamp;
+                left_option.innerHTML = new Date(timestamp * 1000).toLocaleString('en-US', { timeZone: 'America/Chicago' }) + "<br>";
                 left_option.addEventListener('click', async () => {
                     const requestId = Date.now(); // Unique identifier for this request
                     fetch('/fetch-output-data/' + model + '/' + timestamp)
@@ -302,7 +302,8 @@ function fetchTimestamps(model) {
                             container.appendChild(outputheader);
                             container.scrollTop = container.scrollHeight;
                             var outputtext = document.createElement("p");
-                            outputtext.innerHTML = data['output'] + "DONE <br>";
+                            // outputtext.textContent = "done<?\tdone";
+                            outputtext.textContent = data['output'];
                             // outputtext.style.width = outputtext.offsetWidth + 'px';
                             // outputtext.style.height = outputtext.offsetHeight + 'px';
                             container.appendChild(outputtext);
@@ -347,7 +348,7 @@ function fetchTimestamps(model) {
                 // Create a new option element for each timestamp
                 const right_option = document.createElement('a');
                 right_option.href = '#';
-                right_option.textContent = timestamp;
+                right_option.innerHTML = new Date(timestamp * 1000).toLocaleString('en-US', { timeZone: 'America/Chicago' }) + "<br>";
                 right_option.addEventListener('click', () => {
                     fetch('/fetch-output-data/' + model + '/' + timestamp)
                         .then(xd => {
@@ -388,7 +389,7 @@ function fetchTimestamps(model) {
                             container.appendChild(outputheader);
                             container.scrollTop = container.scrollHeight;
                             var outputtext = document.createElement("p");
-                            outputtext.innerHTML = data['output'] + "<br>";
+                            outputtext.textContent = data['output'];
                             container.appendChild(outputtext);
 
                             Object.keys(data['images']).forEach(function (fileName) {
