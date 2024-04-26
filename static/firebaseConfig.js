@@ -303,6 +303,8 @@ function fetchTimestamps(model) {
                             container.scrollTop = container.scrollHeight;
                             var outputtext = document.createElement("p");
                             outputtext.innerHTML = data['output'] + "DONE <br>";
+                            // outputtext.style.width = outputtext.offsetWidth + 'px';
+                            // outputtext.style.height = outputtext.offsetHeight + 'px';
                             container.appendChild(outputtext);
 
                             Object.keys(data['images']).forEach(function (fileName) {
