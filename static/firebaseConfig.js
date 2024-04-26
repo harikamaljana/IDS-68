@@ -269,24 +269,43 @@ function fetchTimestamps(model) {
                             if (!xd.ok) {
                                 throw new Error('Network response was not ok');
                             }
-                            console.log(xd.json())
                             return xd.json();
                         })
                         .then(data => {
-                            // Handle the data or return it
-                            console.log(data)
-                            console.log("printing value: " + data)
-                            var paragraph = document.createElement("p");
-                            // Set the text content of the <p> element to the data variable
-                            paragraph.textContent = data;
-                            // Get the container where you want to print the content
                             var container = document.getElementById(`${model}-output`);
-                            // Clear previous content
-                            container.innerHTML = '';
-                            // Append the <p> element to the container
-                            container.appendChild(paragraph);
-                            // return data;
+                            container.style.width = '100%';
+                            container.style.height = '100vh';
+                            // Handle the data or return it
+                            console.log(data);
+                            console.log("printing value: " + data['dataset']);
+
+                            var inputheader = document.createElement("h1");
+                            var inputOutputString = "<b>Inputs: </b>";
+                            inputheader.innerHTML = inputOutputString;
+                            container.appendChild(inputheader);
+
+                            data['input_list'].forEach(input_param => {
+                                var inputoutput = document.createElement("h3");
+                                var dataoutput = document.createElement("p");
+                                inputoutput.innerHTML = input_param + ": ";
+                                dataoutput.innerHTML = data[input_param] + "<br>";
+                                container.appendChild(inputoutput);
+                                container.appendChild(dataoutput);
+                            });
+
+                            var outputheader = document.createElement("h1");
+                            var outputOutputString = "<b>Outputs: </b>";
+                            outputheader.innerHTML = outputOutputString;
+                            container.appendChild(outputheader);
+                            container.scrollTop = container.scrollHeight;
+                            var outputtext = document.createElement("p");
+                            outputtext.innerHTML = data['output'] + "<br>";
+                            container.appendChild(outputtext);
+
+                            
+
                         })
+
                         .catch(error => {
                             // Handle errors
                             console.error('Error fetching data:', error);
