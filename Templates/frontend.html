@@ -119,17 +119,19 @@
 
       <!-- Input Fields for LCCDE Model -->
       <div id="lccde-inputs" class="input-fields">
-        <button onclick="compareRun()">Compare Runs</button>
+        <button id="lccde-compare-run-button">Compare Runs</button>
         <p>
-            <label for="lccde-dataset">Dataset:</label>
-            <select id="lccde-dataset">
-                <option value="" disabled selected>Select an Option</option>
-                <!-- Populate dataset options here -->
-                <option value="CICIDS2017_sample.csv">CICIDS2017_sample.csv</option>
-                <!-- <option value="" disabled selected>Select an Option</option> -->
-                <!-- Populate dataset options here -->
-                <option value="CICIDS2017_sample_km.csv">CICIDS2017_sample_km.csv</option>
-            </select>
+          <label for="lccde-dataset">Dataset:</label>
+          <select id="lccde-dataset">
+            <option value="" disabled selected>Select an Option</option>
+            <!-- Populate dataset options here -->
+            <option value="CICIDS2017_sample.csv">CICIDS2017_sample.csv</option>
+            <!-- <option value="" disabled selected>Select an Option</option> -->
+            <!-- Populate dataset options here -->
+            <option value="CICIDS2017_sample_km.csv">
+              CICIDS2017_sample_km.csv
+            </option>
+          </select>
         </p>
         <p>
           <label for="lccde-verbose">Verbose:</label>
@@ -177,11 +179,10 @@
           <div class="centered">
             <h2>Select a Previous LCCDE Run</h2>
             <div class="dropdown">
-              <button class="dropbtn" id="lccde-dropdown-content-left">Dropdown</button>
-              <div
-                class="dropdown-content-left"
-                
-              ></div>
+              <button class="dropbtn" id="lccde-dropdown-content-left">
+                Dropdown
+              </button>
+              <div class="dropdown-content-left"></div>
             </div>
           </div>
         </div>
@@ -190,11 +191,10 @@
           <div class="centered">
             <h2>Select a Previous LCCDE Run</h2>
             <div class="dropdown">
-              <button class="dropbtn">Dropdown</button>
-              <div
-                class="dropdown-content-right"
-                id="lccde-dropdown-content-right"
-              ></div>
+              <button class="dropbtn" id="lccde-dropdown-content-right">
+                Dropdown
+              </button>
+              <div class="dropdown-content-right"></div>
             </div>
           </div>
         </div>
@@ -202,7 +202,7 @@
 
       <!-- Input Fields for Tree Based Model -->
       <div id="tree-inputs" class="input-fields">
-        <button onclick="compareRun()">Compare Runs</button>
+        <button id="tree-compare-run-button">Compare Runs</button>
         <p>
           <label for="tree-dataset">Dataset:</label>
           <select id="tree-dataset">
@@ -211,7 +211,9 @@
             <option value="CICIDS2017_sample.csv">CICIDS2017_sample.csv</option>
             <!-- <option value="" disabled selected>Select an Option</option> -->
             <!-- Populate dataset options here -->
-            <option value="CICIDS2017_sample_km.csv">CICIDS2017_sample_km.csv</option>
+            <option value="CICIDS2017_sample_km.csv">
+              CICIDS2017_sample_km.csv
+            </option>
           </select>
         </p>
         <p>
@@ -263,11 +265,11 @@
           <div class="centered">
             <h2>Select a Previous Tree Based Run</h2>
             <div class="dropdown">
-              <button class="dropbtn">Dropdown</button>
-              <div
-                class="dropdown-content-left"
-                id="tree-dropdown-content-left"
-              ></div>
+              <button class="dropbtn" id="tree-dropdown-content-left">
+                Dropdown
+              </button>
+              <div class="dropdown-content-left"></div>
+              <div class="tree-dropdown-output-content-left" id="tree-output"></div>
             </div>
           </div>
         </div>
@@ -288,7 +290,7 @@
 
       <!-- Input Fields for MTH Based Model -->
       <div id="mth-inputs" class="input-fields">
-        <button onclick="compareRun()">Compare Runs</button>
+        <button id="mth-compare-run-button">Compare Runs</button>
         <p>
           <label for="mth-dataset">Dataset:</label>
           <select id="mth-dataset">
@@ -297,7 +299,9 @@
             <option value="CICIDS2017_sample.csv">CICIDS2017_sample.csv</option>
             <!-- <option value="" disabled selected>Select an Option</option> -->
             <!-- Populate dataset options here -->
-            <option value="CICIDS2017_sample_km.csv">CICIDS2017_sample_km.csv</option>
+            <option value="CICIDS2017_sample_km.csv">
+              CICIDS2017_sample_km.csv
+            </option>
           </select>
         </p>
         <p>
@@ -349,11 +353,10 @@
           <div class="centered">
             <h2>Select a Previous MTH Run</h2>
             <div class="dropdown">
-              <button class="dropbtn">Dropdown</button>
-              <div
-                class="dropdown-content-left"
-                id="mth-dropdown-content-left"
-              ></div>
+              <button class="dropbtn" id="mth-dropdown-content-left">
+                Dropdown
+              </button>
+              <div class="dropdown-content-left"></div>
             </div>
           </div>
         </div>
@@ -376,6 +379,7 @@
     <script>
       // Function to handle click on "Compare Runs" button
       function compareRun() {
+        console.log("in compare run");
         // Get left and right split elements for each model
         var leftLccde = document.getElementById("left-lccde");
         var rightLccde = document.getElementById("right-lccde");
@@ -403,35 +407,61 @@
       // Listeners
 
       // Call fetchTimestamps for each model when the page loads
-      document.getElementById("lccde-dropdown-content-left")
-      .addEventListener("click", () => {
-        fetchTimestamps("lccde");
-      });
+      document
+        .getElementById("lccde-compare-run-button")
+        .addEventListener("click", () => {
+          compareRun();
+        });
+      document
+        .getElementById("lccde-dropdown-content-left")
+        .addEventListener("click", () => {
+          fetchTimestamps("lccde");
+        });
 
-      document.getElementById("mth-dropdown-content-left")
-      .addEventListener("click", () => {
-        fetchTimestamps("mth");
-      });
+      document
+        .getElementById("mth-compare-run-button")
+        .addEventListener("click", () => {
+          compareRun();
+        });
 
-      document.getElementById("tree-dropdown-content-left")
-      .addEventListener("click", () => {
-        fetchTimestamps("tree");
-      });
+      document
+        .getElementById("mth-dropdown-content-left")
+        .addEventListener("click", () => {
+          compareRun();
+          console.log("completed compare run");
+          fetchTimestamps("mth");
+        });
 
-      document.getElementById("lccde-dropdown-content-right")
-      .addEventListener("click", () => {
-        fetchTimestamps("lccde");
-      })
-      
-      document.getElementById("mth-dropdown-content-right")
-      .addEventListener("click", () => {
-        fetchTimestamps("mth");
-      })
+      document
+        .getElementById("tree-compare-run-button")
+        .addEventListener("click", () => {
+          compareRun();
+        });
 
-      document.getElementById("tree-dropdown-content-right")
-      .addEventListener("click", () => {
-        fetchTimestamps("tree");
-      })
+      document
+        .getElementById("tree-dropdown-content-left")
+        .addEventListener("click", () => {
+          fetchTimestamps("tree");
+        });
+
+      document
+        .getElementById("lccde-dropdown-content-right")
+        .addEventListener("click", () => {
+          fetchTimestamps("lccde");
+        });
+
+      document
+        .getElementById("mth-dropdown-content-right")
+        .addEventListener("click", () => {
+          compareRun();
+          fetchTimestamps("mth");
+        });
+
+      document
+        .getElementById("tree-dropdown-content-right")
+        .addEventListener("click", () => {
+          fetchTimestamps("tree");
+        });
 
       document
         .getElementById("lccde" + "-run-button")

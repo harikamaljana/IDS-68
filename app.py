@@ -66,20 +66,28 @@ def fetch_data(model):
 @app.route('/fetch-output-data/<model>/<id>', methods=['GET'])
 def fetch_output_data(model, id):
     print('timestamp' + id)
-    doc_ref = db.collection(model).document(id)
+    doc = None
+    doc_ref = db.collection(model).stream()
+    
+    for document in doc_ref:
+        print('docid: ' + document.id + '\tapi: ' + model + "." + str(int(float(id)*1000000)))
+        if document.id == model+"."+str(int(float(id)*1000000)):
+            doc = document.to_dict()
     # Get the document
-    doc = doc_ref.get()
+    # doc = doc_ref.get()
     # Assuming 'timestamps' is the collection and 'timestamp_doc' is the document
-    doc_ref = db.collection(model).document(model+'.'+id)
-    if doc.exists:
-        # Document exists, access its data
-        data = doc.to_dict()
-        print(id + "Document data:", data)
-        return data
-    else:
+    # doc_ref = db.collection(model).document(model+'.'+ id)
+    if doc is None:
         # Document does not exist
-        print(id + "Document does not exist")
+        print("Document does not exist")
         return {'timestamp': 'NOT FOUND'}
+        
+    else:
+        # Document exists, access its data
+        # data = doc.to_dict()
+        # print(doc.keys())
+        return doc
+        
     
 
 @app.route('/run-model/<model>', methods=['POST'])

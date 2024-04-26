@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 
 // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-analytics.js";
@@ -252,63 +251,130 @@ function runModel(model) {
 function fetchTimestamps(model) {
     console.log('fetching data for ' + model)
     fetch(`/fetch-timestamps/${model}`)
-    .then(response => response.json())
-    .then(data => {
-        const dropdown1 = document.getElementById(`${model}-dropdown-content-left`);
-        const dropdown2 = document.getElementById(`${model}-dropdown-content-right`);
-        dropdown1.innerHTML = ''; // Clear existing options
-        dropdown2.innerHTML = ''; // Clear existing options
-        const timestamps = data.timestamps;
-        timestamps.forEach(timestamp => {
-            // Create a new option element for each timestamp
-            const left_option = document.createElement('a');
-            left_option.href = '#';
-            left_option.textContent = timestamp;
-            left_option.addEventListener('click', () => {
-                // console.log(document.getElementById(model+'-dropdown-content-left'))
-                getrunbyID(model, timestamp);
-                // Set the selected timestamp in the input field or perform any other action
-                // Example: document.getElementById('timestamp-input').value = timestamp;
-            });
-            // Create a new option element for each timestamp
-            const right_option = document.createElement('a');
-            right_option.href = '#';
-            right_option.textContent = timestamp;
-            right_option.addEventListener('click', () => {
-                print(getrunbyID(model, timestamp))
-                // console.log(document.getElementById(model+'-dropdown-content-right'))
-                // getrunbyID(model, document.getElementById(model+'-dropown-content-right'));
-                // Set the selected timestamp in the input field or perform any other action
-                // Example: document.getElementById('timestamp-input').value = timestamp;
-            });
-            // Append the option to both dropdown menus
-            dropdown1.appendChild(left_option);
-            dropdown2.appendChild(right_option);
-        });
-    })
-    .catch(error => {
-        console.error('Error fetching timestamps:', error);
-    });
-}
-
-function getrunbyID(model, option_id){
-    return fetch('/fetch-output-data/' + model + '/' + option_id)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            // Handle the data or return it
-            return {'data': data, 'id': option_id};
+            const dropdown1 = document.getElementById(`${model}-dropdown-content-left`);
+            const dropdown2 = document.getElementById(`${model}-dropdown-content-right`);
+            dropdown1.innerHTML = ''; // Clear existing options
+            dropdown2.innerHTML = ''; // Clear existing options
+            const timestamps = data.timestamps;
+            timestamps.forEach(timestamp => {
+                // Create a new option element for each timestamp
+                const left_option = document.createElement('a');
+                left_option.href = '#';
+                left_option.textContent = timestamp;
+                left_option.addEventListener('click', async () => {
+                    fetch('/fetch-output-data/' + model + '/' + timestamp)
+                        .then(xd => {
+                            if (!xd.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            console.log(xd.json())
+                            return xd.json();
+                        })
+                        .then(data => {
+                            // Handle the data or return it
+                            console.log(data)
+                            console.log("printing value: " + data)
+                            var paragraph = document.createElement("p");
+                            // Set the text content of the <p> element to the data variable
+                            paragraph.textContent = data;
+                            // Get the container where you want to print the content
+                            var container = document.getElementById(`${model}-output`);
+                            // Clear previous content
+                            container.innerHTML = '';
+                            // Append the <p> element to the container
+                            container.appendChild(paragraph);
+                            // return data;
+                        })
+                        .catch(error => {
+                            // Handle errors
+                            console.error('Error fetching data:', error);
+                            throw error; // Rethrow the error if necessary
+                        });
+
+
+                    // // console.log(document.getElementById(model+'-dropdown-content-left'))
+                    // document.querySelector(`#${model}-dropdown-content-left`).style.display = "none";
+                    // // document.getElementById(`#${model}-output`).style.display = "flex";
+                    // var outputdata = getrunbyID(model, timestamp);
+                    // console.log("output to CONSOLE" + outputdata)
+                    // document.getElementById(`${model}-output`).value = outputdata;
+
+                    // document.getElementById(`${model}-dropdown-content-left`)= 
+                    // Set the selected timestamp in the input field or perform any other action
+                    // Example: document.getElementById('timestamp-input').value = timestamp;
+                });
+                // Create a new option element for each timestamp
+                const right_option = document.createElement('a');
+                right_option.href = '#';
+                right_option.textContent = timestamp;
+                right_option.addEventListener('click', () => {
+                    fetch('/fetch-output-data/' + model + '/' + option_id)
+                        .then(xd => {
+                            if (!xd.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            console.log(xd.json())
+                            return xd.json();
+                        })
+                        .then(data => {
+                            // Handle the data or return it
+                            console.log(data)
+                            console.log("printing value: " + data)
+                            var paragraph = document.createElement("p");
+                            // Set the text content of the <p> element to the data variable
+                            paragraph.textContent = data;
+                            // Get the container where you want to print the content
+                            var container = document.getElementById(`${model}-output`);
+                            // Clear previous content
+                            container.innerHTML = '';
+                            // Append the <p> element to the container
+                            container.appendChild(paragraph);
+                            // return data;
+                        })
+                        .catch(error => {
+                            // Handle errors
+                            console.error('Error fetching data:', error);
+                            throw error; // Rethrow the error if necessary
+                        });
+
+                });
+                // Append the option to both dropdown menus
+                dropdown1.appendChild(left_option);
+                dropdown2.appendChild(right_option);
+            });
         })
         .catch(error => {
-            // Handle errors
-            console.error('Error fetching data:', error);
-            throw error; // Rethrow the error if necessary
+            console.error('Error fetching timestamps:', error);
         });
 }
+
+// async function getrunbyID(model, option_id) {
+//     var value;
+//     fetch('/fetch-output-data/' + model + '/' + option_id)
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Network response was not ok');
+//             }
+//             console.log(response.json())
+//             return response.json();
+//         })
+//         // .then(data => {
+//         //     // Handle the data or return it
+//         //     value = data;
+//         //     console.log(data)
+//         //     console.log("printing value: " + data)
+//         //     // return data;
+//         // })
+//         .catch(error => {
+//             // Handle errors
+//             console.error('Error fetching data:', error);
+//             throw error; // Rethrow the error if necessary
+//         });
+
+//     // return value;
+// }
 
 function displayImages(images, model) {
     const container = document.getElementById(model + '-image-output-container');
