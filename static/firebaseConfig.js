@@ -302,9 +302,13 @@ function fetchTimestamps(model) {
                             outputheader.innerHTML = outputOutputString;
                             container.appendChild(outputheader);
                             container.scrollTop = container.scrollHeight;
-                            var outputtext = document.createElement("p");
+                            var outputtext = document.createElement("pre");
+                            outputtext.style.whiteSpace = "pre-wrap"; // Allow wrapping of long lines
+                            // container.style.overflowX = "auto"; // Enable horizontal scrolling if necessary
+
                             // outputtext.textContent = "done<?\tdone";
-                            outputtext.textContent = data['output'];
+                            // outputtext.textContent = data['output'];
+                            outputtext.textContent = modifyOutput(data['output'], model);
                             // outputtext.style.width = outputtext.offsetWidth + 'px';
                             // outputtext.style.height = outputtext.offsetHeight + 'px';
                             container.appendChild(outputtext);
@@ -390,8 +394,11 @@ function fetchTimestamps(model) {
                             outputheader.innerHTML = outputOutputString;
                             container.appendChild(outputheader);
                             container.scrollTop = container.scrollHeight;
-                            var outputtext = document.createElement("p");
-                            outputtext.textContent = data['output'];
+                            var outputtext = document.createElement("pre");
+                            outputtext.style.whiteSpace = "pre-wrap"; // Allow wrapping of long lines
+                            // container.style.overflowX = "auto"; // Enable horizontal scrolling if necessary
+                            outputtext.textContent = modifyOutput(data['output'], model);
+                            // outputtext.textContent = modifiedOutput(data['output'], model);
                             container.appendChild(outputtext);
 
                             Object.keys(data['images']).forEach(function (fileName) {
