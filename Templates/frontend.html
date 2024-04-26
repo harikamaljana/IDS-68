@@ -41,7 +41,11 @@
       }
 
       /* CSS for the dropdown menus */
-      .dropdown {
+      .dropdown1 {
+        position: relative;
+        display: inline-block;
+      }
+      .dropdown2 {
         position: relative;
         display: inline-block;
       }
@@ -265,11 +269,15 @@
           <div class="centered">
             <h2>Select a Previous Tree Based Run</h2>
             <div class="dropdown">
-              <button class="dropbtn" id="tree-dropdown-content-left">
+              <button class="dropbtn1" id="tree-dropdown-content-left">
                 Dropdown
               </button>
               <div class="dropdown-content-left"></div>
-              <div class="tree-dropdown-output-content-left" id="tree-output"></div>
+              <div
+                class="tree-dropdown-output-content-left"
+                id="tree-output-left"
+                style="display: block"
+              ></div>
             </div>
           </div>
         </div>
@@ -278,10 +286,14 @@
           <div class="centered">
             <h2>Select a Previous Tree Based Run</h2>
             <div class="dropdown">
-              <button class="dropbtn">Dropdown</button>
+              <button class="dropbtn2" id="tree-dropdown-content-right">
+                Dropdown
+              </button>
+              <div class="dropdown-content-right"></div>
               <div
-                class="dropdown-content-right"
-                id="tree-dropdown-content-right"
+                class="tree-dropdown-output-content-right"
+                id="tree-output-right"
+                style="display: block"
               ></div>
             </div>
           </div>
