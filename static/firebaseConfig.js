@@ -302,7 +302,22 @@ function fetchTimestamps(model) {
                             outputtext.innerHTML = data['output'] + "<br>";
                             container.appendChild(outputtext);
 
-                            
+                            Object.keys(data['images']).forEach(function (fileName) {
+                                var fileHeader = document.createElement("h3");
+                                fileHeader.innerHTML = "fileName";
+
+                                // Extract the base64-encoded image data
+                                var imageData = data.images[fileName];
+
+                                // Create an <img> element
+                                var img = new Image();
+
+                                // Set the src attribute to a data URL representing the PNG image data
+                                img.src = 'data:image/png;base64,' + imageData;
+
+                                // Append the image to the container
+                                container.appendChild(img);
+                            });
 
                         })
 
