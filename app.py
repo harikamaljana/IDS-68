@@ -39,10 +39,7 @@ def fetch_timestamps(model):
     
     for doc in model_docs:
         # print(doc.to_dict()['timestamp'].astimezone(pytz.timezone('US/Central')))
-        timestamps.append(doc.to_dict()['timestamp'])
-        
-    # print(timestamps)
-    # print(timestamps)    
+        timestamps.append(doc.to_dict()['timestamp'])   
     return {'timestamps': timestamps}
 
 @app.route('/fetch-data/<model>', methods=['GET'])
@@ -68,15 +65,29 @@ def fetch_data(model):
 
 @app.route('/fetch-output-data/<model>/<id>', methods=['GET'])
 def fetch_output_data(model, id):
-    print('id is ' + json.dumps(id))
-    return {'id': id}
-    # get_data(model, id)
+    print('timestamp' + id)
+    doc_ref = db.collection(model).document(id)
+    # Get the document
+    doc = doc_ref.get()
+    # Assuming 'timestamps' is the collection and 'timestamp_doc' is the document
+    doc_ref = db.collection(model).document(model+'.'+id)
+    if doc.exists:
+        # Document exists, access its data
+        data = doc.to_dict()
+        print(id + "Document data:", data)
+        return data
+    else:
+        # Document does not exist
+        print(id + "Document does not exist")
+        return {'timestamp': 'NOT FOUND'}
+    
 
 @app.route('/run-model/<model>', methods=['POST'])
 def run_model(model):
     try:
-        time = datetime.now(pytz.timezone('US/Central'))
-        print('updated with the right model' + model)
+        time = datetime.now(pytz.utc).astimezone(pytz.timezone('US/Central')).timestamp()
+        print(time)
+        print('updated with the right model' + model + 'with time: ' + str(int(time*1000000)))
         req = request.json
         # print('PICKED with the right model' + json.dumps(req, indent=4))
         # Execute the Python script
@@ -130,7 +141,7 @@ def run_model(model):
             for filename in os.listdir(heatmaps_dir):
                 if filename.endswith('.png'):
                     output_data['images'][filename] = f"/get_heatmap/{filename}"  # Adjust the URL as needed
-                    
+            print('images OUTPUTTED')
             store_heatmap(model, req, time)
             
             # Return JSON response with output and images
@@ -148,21 +159,13 @@ def run_model(model):
 def get_heatmap(filename):
     return send_file(os.path.join('heatmaps', filename), mimetype='image/png')
 
-def get_data(model, id):
-    doc_ref = db.collection(model).document(id)
-    # Get the document
-    doc = doc_ref.get()
-    if doc.exists:
-        # Document exists, access its data
-        data = doc.to_dict()
-        print("Document data:", data)
-    else:
-        # Document does not exist
-        print("Document does not exist")
+# def get_data(model, id):
+    
     
 
 def store_data(model, req, time):
-    storage_id = model + "." + time.strftime("%Y-%m-%d_%H:%M:%S")
+    print('malone')
+    storage_id = model + "." + str(int(time*1000000))
     req['timestamp'] = time
     data_store = db.collection(model).document(storage_id)
     data_store.set(req)
@@ -170,7 +173,7 @@ def store_data(model, req, time):
     # return
 
 def store_output(model, req, time, output):
-    storage_id = model + "." + time.strftime("%Y-%m-%d_%H:%M:%S")
+    storage_id = model + "." + str(int(time*1000000))
     req['output'] = output
     data_store = db.collection(model).document(storage_id)
     data_store.set(req)
@@ -180,7 +183,7 @@ def store_heatmap(model, req, time):
     print('getting json data')
     
     # old_id = model + "." + 'timeafterexecution'
-    storage_id = model + "." + time.strftime("%Y-%m-%d_%H:%M:%S")
+    storage_id = model + "." + str(int(time*1000000))
     # old_doc_ref = db.collection(model).document(old_id)
     # old_doc_data = old_doc_ref.get().to_dict()
     
@@ -214,9 +217,12 @@ def store_heatmap(model, req, time):
             base64dataImagesJson[f] = encode_png_to_base64(files_directory+f)
     print('files are encoded')
     images_ref = db.collection(model).document(storage_id)
+    
     print('files are decoded')
     
     req['images'] = base64dataImagesJson
+    req = {'images': base64dataImagesJson}
+    print(list(req.keys()))
     print('updated files')
     # print(json.dumps(req))
     # exit()
