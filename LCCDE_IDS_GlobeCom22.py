@@ -214,6 +214,7 @@ start_time = time.time()
 lg = lgb.LGBMClassifier(random_state=rs, learning_rate=lr)
 lg.fit(X_train, y_train)
 y_pred = lg.predict(X_test)
+print("START")
 print(classification_report(y_test,y_pred))
 print("Accuracy of LightGBM: "+ str(accuracy_score(y_test, y_pred)))
 print("Precision of LightGBM: "+ str(precision_score(y_test, y_pred, average='weighted')))
@@ -254,7 +255,7 @@ with open('LightGBM_result.json', 'w') as json_file:
 end_time = time.time()
 elapsed_time = end_time - start_time
 print(f"Elapsed time: {elapsed_time} seconds")
-
+print("STOP")
 
 # In[11]:
 
@@ -283,6 +284,7 @@ else:
 xg.fit(X_train_x, y_train)
 
 y_pred = xg.predict(X_test_x)
+print("START")
 print(classification_report(y_test,y_pred))
 print("Accuracy of XGBoost: "+ str(accuracy_score(y_test, y_pred)))
 print("Precision of XGBoost: "+ str(precision_score(y_test, y_pred, average='weighted')))
@@ -304,6 +306,7 @@ plt.savefig("heatmaps/XGBoost.png")
 end_time = time.time()
 elapsed_time = end_time - start_time
 print(f"Elapsed time: {elapsed_time} seconds")
+print("STOP")
 
 
 # In[12]:
@@ -327,6 +330,7 @@ cb = cbt.CatBoostClassifier(verbose=vb, boosting_type=bt)
 
 cb.fit(X_train, y_train)
 y_pred = cb.predict(X_test)
+print("START")
 print(classification_report(y_test,y_pred))
 print("Accuracy of CatBoost: "+ str(accuracy_score(y_test, y_pred)))
 print("Precision of CatBoost: "+ str(precision_score(y_test, y_pred, average='weighted')))
@@ -348,6 +352,7 @@ plt.savefig("heatmaps/CatBoost.png")
 end_time = time.time()
 elapsed_time = end_time - start_time
 print(f"Elapsed time: {elapsed_time} seconds")
+print("STOP")
 
 
 # ## Proposed ensemble model: Leader Class and Confidence Decision Ensemble (LCCDE)

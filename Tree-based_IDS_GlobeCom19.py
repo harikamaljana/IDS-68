@@ -93,12 +93,16 @@ else :
 if algorithm_data['min_samples_split'] == '':
     mss = 0.1
 else :
-    mss = int(algorithm_data['min_samples_split'])
+    mss = float(algorithm_data['min_samples_split'])
+    if mss >= 2:
+        mss = int(mss)
 
 if algorithm_data['min_samples_leaf'] == '':
     msl = 0.1
 else :
     msl = float(algorithm_data['min_samples_leaf'])
+    if msl >= 2:
+        msl = int(msl)
 
 print(f'Algorithm Data: {algorithm_data}')
 print(f'random_state: {rs}')
@@ -252,6 +256,7 @@ dt.fit(X_train,y_train)
 dt_score=dt.score(X_test,y_test)
 y_predict=dt.predict(X_test)
 y_true=y_test
+print("START")
 print('Accuracy of DT: '+ str(dt_score))
 precision,recall,fscore,none= precision_recall_fscore_support(y_true, y_predict, average='weighted') 
 print('Precision of DT: '+(str(precision)))
@@ -264,6 +269,7 @@ sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
 plt.savefig("heatmaps/TB_DecisionTree.png")
+print("STOP")
 #plt.show()
 
 
@@ -283,6 +289,7 @@ rf.fit(X_train,y_train)
 rf_score=rf.score(X_test,y_test)
 y_predict=rf.predict(X_test)
 y_true=y_test
+print("START")
 print('Accuracy of RF: '+ str(rf_score))
 precision,recall,fscore,none= precision_recall_fscore_support(y_true, y_predict, average='weighted') 
 print('Precision of RF: '+(str(precision)))
@@ -295,6 +302,7 @@ sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
 plt.savefig("heatmaps/TB_RandomForest.png")
+print("STOP")
 #plt.show()
 
 
@@ -314,6 +322,7 @@ et.fit(X_train,y_train)
 et_score=et.score(X_test,y_test)
 y_predict=et.predict(X_test)
 y_true=y_test
+print("START")
 print('Accuracy of ET: '+ str(et_score))
 precision,recall,fscore,none= precision_recall_fscore_support(y_true, y_predict, average='weighted') 
 print('Precision of ET: '+(str(precision)))
@@ -326,6 +335,7 @@ sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
 plt.savefig("heatmaps/TB_ExtraTrees.png")
+print("STOP")
 #plt.show()
 
 
@@ -345,6 +355,7 @@ xg.fit(X_train,y_train)
 xg_score=xg.score(X_test,y_test)
 y_predict=xg.predict(X_test)
 y_true=y_test
+print("START")
 print('Accuracy of XGBoost: '+ str(xg_score))
 precision,recall,fscore,none= precision_recall_fscore_support(y_true, y_predict, average='weighted') 
 print('Precision of XGBoost: '+(str(precision)))
@@ -357,6 +368,7 @@ sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
 plt.savefig("heatmaps/TB_XGB.png")
+print("STOP")
 #plt.show()
 
 
@@ -414,6 +426,7 @@ stk = xgb.XGBClassifier().fit(x_train, y_train)
 y_predict=stk.predict(x_test)
 y_true=y_test
 stk_score=accuracy_score(y_true,y_predict)
+print("START")
 print('Accuracy of Stacking: '+ str(stk_score))
 precision,recall,fscore,none= precision_recall_fscore_support(y_true, y_predict, average='weighted') 
 print('Precision of Stacking: '+(str(precision)))
@@ -426,6 +439,7 @@ sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
 plt.savefig("heatmaps/TB_StackModel.png")
+print("STOP")
 # plt.show()
 
 
@@ -540,6 +554,7 @@ dt.fit(X_train,y_train)
 dt_score=dt.score(X_test,y_test)
 y_predict=dt.predict(X_test)
 y_true=y_test
+print("START")
 print('Accuracy of DT: '+ str(dt_score))
 precision,recall,fscore,none= precision_recall_fscore_support(y_true, y_predict, average='weighted') 
 print('Precision of DT: '+(str(precision)))
@@ -552,6 +567,7 @@ sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
 plt.savefig("heatmaps/TB_FS_DecisionTree.png")
+print("STOP")
 # plt.show()
 
 
@@ -570,6 +586,7 @@ rf.fit(X_train,y_train) # modelin veri üzerinde öğrenmesi fit fonksiyonuyla y
 rf_score=rf.score(X_test,y_test)
 y_predict=rf.predict(X_test)
 y_true=y_test
+print("START")
 print('Accuracy of RF: '+ str(rf_score))
 precision,recall,fscore,none= precision_recall_fscore_support(y_true, y_predict, average='weighted') 
 print('Precision of RF: '+(str(precision)))
@@ -582,6 +599,7 @@ sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
 plt.savefig("heatmaps/TB_FS_RandomForest.png")
+print("STOP")
 # plt.show()
 
 
@@ -600,6 +618,7 @@ et.fit(X_train,y_train)
 et_score=et.score(X_test,y_test)
 y_predict=et.predict(X_test)
 y_true=y_test
+print("START")
 print('Accuracy of ET: '+ str(et_score))
 precision,recall,fscore,none= precision_recall_fscore_support(y_true, y_predict, average='weighted') 
 print('Precision of ET: '+(str(precision)))
@@ -612,6 +631,7 @@ sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
 plt.savefig("heatmaps/TB_FS_ExtraTrees.png")
+print("STOP")
 # plt.show()
 
 
@@ -630,6 +650,7 @@ xg.fit(X_train,y_train)
 xg_score=xg.score(X_test,y_test)
 y_predict=xg.predict(X_test)
 y_true=y_test
+print("START")
 print('Accuracy of XGBoost: '+ str(xg_score))
 precision,recall,fscore,none= precision_recall_fscore_support(y_true, y_predict, average='weighted') 
 print('Precision of XGBoost: '+(str(precision)))
@@ -642,6 +663,7 @@ sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
 plt.savefig("heatmaps/TB_FS_XGB.png")
+print("STOP")
 # plt.show()
 
 
@@ -693,6 +715,7 @@ stk = xgb.XGBClassifier().fit(x_train, y_train)
 y_predict=stk.predict(x_test)
 y_true=y_test
 stk_score=accuracy_score(y_true,y_predict)
+print("START")
 print('Accuracy of Stacking: '+ str(stk_score))
 precision,recall,fscore,none= precision_recall_fscore_support(y_true, y_predict, average='weighted') 
 print('Precision of Stacking: '+(str(precision)))
@@ -705,6 +728,7 @@ sns.heatmap(cm,annot=True,linewidth=0.5,linecolor="red",fmt=".0f",ax=ax)
 plt.xlabel("y_pred")
 plt.ylabel("y_true")
 plt.savefig("heatmaps/TB_FS_StackModel.png")
+print("STOP")
 # plt.show()
 
 

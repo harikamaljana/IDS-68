@@ -120,7 +120,14 @@ function storeData(model, data) {
 }
 
 function modifyOutput(output) {
-    let startIndex = output.indexOf('precision');
-    let modifiedOutput = output.substring(startIndex);
-    return modifiedOutput;
+    let modifiedOutputs = [];
+    let startIndex = output.indexOf('START');
+    while (startIndex !== -1) { 
+        let stopIndex = output.indexOf('STOP', startIndex);
+        if (stopIndex === -1) break; // No matching "STOP" found, exit loop
+        let modifiedOutput = output.substring(startIndex + 'START'.length, stopIndex).trim();
+        modifiedOutputs.push(modifiedOutput);
+        startIndex = output.indexOf('START', stopIndex + 'STOP'.length); // Move to next "START"
+    }
+    return modifiedOutputs;
 }
