@@ -65,7 +65,7 @@ function runModel(model) {
                 alert("Error executing model");
             } else {
                 console.log("Output:", data.output);
-                let modifiedOutput = modifyOutput(data.output);
+                let modifiedOutput = modifyOutput(data.output, model);
                 document.getElementById(model + '-output-container').innerText = "";
                 document.getElementById(model + '-output-container').innerText = modifiedOutput;
                 document.getElementById(model + '-output-container').style.display = 'block'; // Display text output container
@@ -264,6 +264,7 @@ function fetchTimestamps(model) {
                 left_option.href = '#';
                 left_option.textContent = timestamp;
                 left_option.addEventListener('click', async () => {
+                    const requestId = Date.now(); // Unique identifier for this request
                     fetch('/fetch-output-data/' + model + '/' + timestamp)
                         .then(xd => {
                             if (!xd.ok) {
@@ -278,6 +279,8 @@ function fetchTimestamps(model) {
                             // Handle the data or return it
                             console.log(data);
                             console.log("printing value: " + data['dataset']);
+
+                            container.innerHTML = '';
 
                             var inputheader = document.createElement("h1");
                             var inputOutputString = "<b>Inputs: </b>";
@@ -299,7 +302,7 @@ function fetchTimestamps(model) {
                             container.appendChild(outputheader);
                             container.scrollTop = container.scrollHeight;
                             var outputtext = document.createElement("p");
-                            outputtext.innerHTML = data['output'] + "<br>";
+                            outputtext.innerHTML = data['output'] + "DONE <br>";
                             container.appendChild(outputtext);
 
                             Object.keys(data['images']).forEach(function (fileName) {
@@ -353,12 +356,15 @@ function fetchTimestamps(model) {
                             return xd.json();
                         })
                         .then(data => {
+                            const requestId = Date.now(); // Unique identifier for this request
                             var container = document.getElementById(`${model}-output-right`);
                             container.style.width = '100%';
                             container.style.height = '100vh';
                             // Handle the data or return it
                             console.log(data);
                             console.log("printing value: " + data['dataset']);
+
+                            container.innerHTML = '';
 
                             var inputheader = document.createElement("h1");
                             var inputOutputString = "<b>Inputs: </b>";

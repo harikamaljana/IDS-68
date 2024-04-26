@@ -119,13 +119,35 @@ function storeData(model, data) {
     console.log("EXECUTED SUCCESSFULLY!!! YO MODEL NAME IS:" + JSON.stringify(data));
 }
 
-function modifyOutput(output) {
+function modifyOutput(output, model) {
     let modifiedOutputs = [];
+    count = 0;
     let startIndex = output.indexOf('START');
-    while (startIndex !== -1) { 
+    while (startIndex !== -1) {
         let stopIndex = output.indexOf('STOP', startIndex);
         if (stopIndex === -1) break; // No matching "STOP" found, exit loop
         let modifiedOutput = output.substring(startIndex + 'START'.length, stopIndex).trim();
+
+        if (model == 'tree' || model == 'mth') {
+            if (count < 3) {
+                modifiedOutput += '\n'.repeat(11);
+                count++;
+            }
+            else {
+                modifiedOutput += '\n'.repeat(10);
+                count++;
+            }
+        }
+        else {
+            if (count == 0) {
+                modifiedOutput += '\n'.repeat(6);
+                count++;
+            }
+            else {
+                modifiedOutput += '\n'.repeat(5);
+                count++;
+            }
+        }
         modifiedOutputs.push(modifiedOutput);
         startIndex = output.indexOf('START', stopIndex + 'STOP'.length); // Move to next "START"
     }
