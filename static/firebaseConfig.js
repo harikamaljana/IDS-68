@@ -263,6 +263,7 @@ function fetchTimestamps(model) {
                 const left_option = document.createElement('a');
                 left_option.href = '#';
                 left_option.innerHTML = new Date(timestamp * 1000).toLocaleString('en-US', { timeZone: 'America/Chicago' }) + "<br>";
+                left_option.classList.add('timestamp-link');
                 left_option.addEventListener('click', async () => {
                     const requestId = Date.now(); // Unique identifier for this request
                     fetch('/fetch-output-data/' + model + '/' + timestamp)
@@ -349,6 +350,7 @@ function fetchTimestamps(model) {
                 const right_option = document.createElement('a');
                 right_option.href = '#';
                 right_option.innerHTML = new Date(timestamp * 1000).toLocaleString('en-US', { timeZone: 'America/Chicago' }) + "<br>";
+                right_option.classList.add('timestamp-link');
                 right_option.addEventListener('click', () => {
                     fetch('/fetch-output-data/' + model + '/' + timestamp)
                         .then(xd => {
@@ -467,3 +469,4 @@ function displayImages(images, model) {
 }
 
 export { runModel, fetchTimestamps };
+
